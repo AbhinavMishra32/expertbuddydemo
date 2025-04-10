@@ -29,6 +29,10 @@ model Document {
   unlockedById String?
   textContent  String
   title        String
+  category     String
+  subject      String
+  description  String?
+  tags         String[]
   authorId     String
   author       User     @relation("UploadedDocuments", fields: [authorId], references: [id])
   unlockedBy   User?    @relation("UnlockedDocuments", fields: [unlockedById], references: [id])

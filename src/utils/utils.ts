@@ -4,6 +4,7 @@ import {
     createUserContent,
     createPartFromUri,
 } from "@google/genai";
+import { SchemaType } from "@google/generative-ai";
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
@@ -18,6 +19,34 @@ if (!GEMINI_API_KEY) {
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 async function aiOnPdf(fileUrl: string, prompt: string) {
+    // const schema = {
+    //     type: SchemaType.OBJECT,
+    //     properties: {
+    //         textContent: {
+    //             type: SchemaType.STRING,
+    //         },
+    //         tags: {
+    //             type: SchemaType.ARRAY,
+    //             items: {
+    //                 type: SchemaType.STRING,
+    //             },
+    //         },
+    //         category: {
+    //             type: SchemaType.STRING,
+    //         },
+    //     },
+    //     required: ["textContent", "tags", "category"],
+    // }
+
+    const schema = {
+        "type": "object",
+        "properties": {
+            "response": {
+                "type": "string"
+            }
+        }
+    }
+
     // file download as we have it in url
     const response = await axios.get(fileUrl, { responseType: "arraybuffer" });
     const filePath = path.join(process.cwd(), "temp.pdf");
@@ -35,14 +64,18 @@ async function aiOnPdf(fileUrl: string, prompt: string) {
                 createPartFromUri(uploaded.uri, uploaded.mimeType),
                 prompt,
             ]),
+            config: {
+                responseMimeType: 'application/json',
+                responseSchema: schema,
+            }
         });
         return result;
     };
 
     const result = await generateResponse();
 
-    console.log(result.text);
-    // Return only serializable data
+    // console.log(result.text);
+    console.log("JSON RESULT: ", result);
     return { text: result.text };
 }
 

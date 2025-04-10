@@ -24,9 +24,7 @@ export default function Home() {
 
   return (
     <>
-      <UserProfileButton />
       <p>Dashboard Page</p>
-      <p>Yoooo</p>
       {uploading && <p>Uploading...</p>}
       {analysing && <p>Analysing...</p>}
       {aiResponse && <div className="mt-4 p-4 border rounded">
@@ -51,7 +49,6 @@ export default function Home() {
           }
         }}
         onUploadError={(error: Error) => {
-          // Do something with the error.
           alert(`ERROR! ${error.message}`);
         }}
       />
