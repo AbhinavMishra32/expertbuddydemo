@@ -31,7 +31,7 @@ export default async function RootLayout({
               {/* <SdSidebar /> */}
               <div className="absolute top-0 right-0 z-50 m-3 flex items-center justify-center gap-3">
                 <ThemeSelectorButton />
-                {/* <UserProfileButton /> */}
+                <UserProfileButton />
               </div>
               <div className='flex flex-col w-full bg-gray-50 dark:bg-neutral-950'>
                 {children}

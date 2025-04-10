@@ -14,9 +14,29 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  extId          String    @unique
-  attributes     Json
-  username       String
-  email          String
+  id                String     @id @default(cuid())
+  extId             String     @unique
+  attributes        Json
+  username          String
+  email             String
+  uploadedDocuments Document[] @relation("UploadedDocuments")
+  unlockedDocuments Document[] @relation("UnlockedDocuments")
+}
+
+model Document {
+  id           String   @id @default(cuid())
+  url          String   @unique
+  unlockedById String?
+  textContent  String
+  title        String
+  authorId     String
+  author       User     @relation("UploadedDocuments", fields: [authorId], references: [id])
+  unlockedBy   User?    @relation("UnlockedDocuments", fields: [unlockedById], references: [id])
+  ContentType  String?
+  Words        Int?
+  Pages        Int?
+  Level        String?
+  Language     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
