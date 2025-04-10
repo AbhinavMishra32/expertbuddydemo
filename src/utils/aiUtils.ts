@@ -8,7 +8,6 @@ import { useTheme } from 'next-themes';
 // import fsPromises from 'fs/promises';
 
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string
-console.log("GEMINI API KEY: ", GEMINI_API_KEY);
 if (!GEMINI_API_KEY) {
   throw new Error("Missing NEXT_PUBLIC_GEMINI_API_KEY in environment variables")
 }

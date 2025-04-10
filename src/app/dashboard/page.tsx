@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -8,7 +8,8 @@ import { useUser } from "@clerk/nextjs";
 import UserProfileButton from "@/components/UserProfileButton";
 import { UploadButton } from "@/utils/uploadthings";
 import aiOnPdf from "@/utils/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUsers } from "@/actions";
 
 export default function Home() {
 
@@ -38,9 +39,9 @@ export default function Home() {
           setUploading(false);
           setAnalysing(true);
           try {
-            const { text } = await aiOnPdf(res[0].ufsUrl, "Give all the text that is present in the pdf but just the first 10 lines");
+            const text = await aiOnPdf(res[0].ufsUrl, "Give all the text that is present in the pdf but just the first 10 lines, also give the tags and the category of the pdf, tell the subject of the pdf and give a short description of the pdf, and the language of the pdf");
             console.log("AI Response: ", text);
-            setAiResponse(text || "No response from AI");
+            // setAiResponse(text || "No response from AI");
           } catch (error) {
             console.error("Error analyzing PDF:", error);
             setAiResponse("Error analyzing PDF");

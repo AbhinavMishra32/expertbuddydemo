@@ -37,7 +37,7 @@ model Document {
   author       User     @relation("UploadedDocuments", fields: [authorId], references: [id])
   unlockedBy   User?    @relation("UnlockedDocuments", fields: [unlockedById], references: [id])
   ContentType  String?
-  Words        Int?
+  WordCount        Int?
   Pages        Int?
   Level        String?
   Language     String?

@@ -10,7 +10,6 @@ import fs from "fs/promises";
 import path from "path";
 
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string
-console.log("GEMINI API KEY: ", GEMINI_API_KEY);
 if (!GEMINI_API_KEY) {
     throw new Error("Missing NEXT_PUBLIC_GEMINI_API_KEY in environment variables")
 }
@@ -19,33 +18,33 @@ if (!GEMINI_API_KEY) {
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 async function aiOnPdf(fileUrl: string, prompt: string) {
-    // const schema = {
-    //     type: SchemaType.OBJECT,
-    //     properties: {
-    //         textContent: {
-    //             type: SchemaType.STRING,
-    //         },
-    //         tags: {
-    //             type: SchemaType.ARRAY,
-    //             items: {
-    //                 type: SchemaType.STRING,
-    //             },
-    //         },
-    //         category: {
-    //             type: SchemaType.STRING,
-    //         },
-    //     },
-    //     required: ["textContent", "tags", "category"],
-    // }
 
     const schema = {
         "type": "object",
         "properties": {
-            "response": {
-                "type": "string"
+          "textContent": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
+          },
+            "subject": {
+                "type": "string"
+            },
+          "category": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
         }
-    }
+      }
 
     // file download as we have it in url
     const response = await axios.get(fileUrl, { responseType: "arraybuffer" });
@@ -75,8 +74,8 @@ async function aiOnPdf(fileUrl: string, prompt: string) {
     const result = await generateResponse();
 
     // console.log(result.text);
-    console.log("JSON RESULT: ", result);
-    return { text: result.text };
+    console.log("JSON RESULT: ", result.text ? JSON.parse(result.text) : "Something went wrong while getting AI response");
+    return result.text ? JSON.parse(result.text) : "Something went wrong while getting AI response";
 }
 
 export default aiOnPdf;
