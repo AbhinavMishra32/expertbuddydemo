@@ -14,6 +14,15 @@ if (!GEMINI_API_KEY) {
     throw new Error("Missing NEXT_PUBLIC_GEMINI_API_KEY in environment variables")
 }
 
+type AIResponse = {
+    textContent: string;
+    tags: string[];
+    category: string;
+    subject: string;
+    description: string;
+    language: string;
+};
+
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
@@ -58,7 +67,7 @@ async function aiOnPdf(fileUrl: string, prompt: string) {
 
     const generateResponse = async () => {
         const result = await ai.models.generateContent({
-            model: "gemini-1.5-pro",
+            model: "gemini-2.0-flash-exp",
             contents: createUserContent([
                 createPartFromUri(uploaded.uri, uploaded.mimeType),
                 prompt,
@@ -73,9 +82,18 @@ async function aiOnPdf(fileUrl: string, prompt: string) {
 
     const result = await generateResponse();
 
-    // console.log(result.text);
-    console.log("JSON RESULT: ", result.text ? JSON.parse(result.text) : "Something went wrong while getting AI response");
-    return result.text ? JSON.parse(result.text) : "Something went wrong while getting AI response";
+    if (!result.text) {
+        throw new Error("Something went wrong while getting AI response");
+    }
+
+    try {
+        const parsedResponse = JSON.parse(result.text) as AIResponse;
+        console.log("JSON RESULT: ", parsedResponse);
+        return parsedResponse;
+    } catch (error) {
+        console.error("Failed to parse AI response:", error);
+        throw new Error("Failed to parse AI response");
+    }
 }
 
 export default aiOnPdf;
