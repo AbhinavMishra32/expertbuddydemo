@@ -30,17 +30,55 @@ model Document {
   textContent  String
   title        String
   category     String
-  subject      String
+  subject      Subject
   description  String?
-  tags         String[]
+  tags         Tags[]
   authorId     String
   author       User     @relation("UploadedDocuments", fields: [authorId], references: [id])
   unlockedBy   User?    @relation("UnlockedDocuments", fields: [unlockedById], references: [id])
   ContentType  String?
-  WordCount        Int?
+  WordCount    Int?
   Pages        Int?
   Level        String?
   Language     String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+enum Subject {
+  Mathematics
+  Science
+  Literature
+  History
+  Engineering
+  Psychology
+  Economics
+  Law
+  Art
+  Music
+  Geography
+  Philosophy
+  Business
+}
+
+enum Tags {
+  Algebra
+  Calculus
+  Programming
+  QuantumMechanics
+  WorldHistory
+  Genetics
+  OrganicChemistry
+  Poetry
+  Microeconomics
+  CivilEngineering
+  Ethics
+  Painting
+  ClassicalMusic
+  Cartography
+  InternationalRelations
+  CognitivePsychology
+  SocialTheory
+  Marketing
+  CorporateLaw
 }

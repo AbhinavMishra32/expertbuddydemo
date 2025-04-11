@@ -4,6 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { UploadButton } from "@/utils/uploadthings";
 import aiOnPdf from "@/utils/utils";
 import { saveDoc } from "@/actions/saveDoc";
+import { Subject, Tags } from "@prisma/client";
 
 export default function Home() {
   const { isLoaded, user } = useUser();
@@ -12,7 +13,7 @@ export default function Home() {
   const [analysing, setAnalysing] = useState(false);
   const [aiResponse, setAiResponse] = useState<any>(null);
 
-  const handleDocumentUpload = async (textContent: string, tags: string[], category: string, subject: string, description: string, fileUrl: string, language: string) => {
+  const handleDocumentUpload = async (textContent: string, tags: Tags[], category: string, subject: Subject, description: string, fileUrl: string, language: string) => {
     if (!user?.id) {
       console.error("User not authenticated");
       return;
@@ -63,9 +64,9 @@ export default function Home() {
             setAiResponse(text || null);
             handleDocumentUpload(
               text.textContent,
-              text.tags,
+              text.tags.map(tag => tag as Tags),
               text.category,
-              text.subject,
+              text.subject as Subject,
               text.description,
               res[0].ufsUrl,
               text.language

@@ -5,6 +5,7 @@ import {
     createPartFromUri,
 } from "@google/genai";
 import { SchemaType } from "@google/generative-ai";
+import { Subject, Tags } from "@prisma/client";
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
@@ -16,9 +17,9 @@ if (!GEMINI_API_KEY) {
 
 type AIResponse = {
     textContent: string;
-    tags: string[];
+    tags: Tags[];
     category: string;
-    subject: string;
+    subject: Subject;
     description: string;
     language: string;
 };
@@ -31,29 +32,31 @@ async function aiOnPdf(fileUrl: string, prompt: string) {
     const schema = {
         "type": "object",
         "properties": {
-          "textContent": {
-            "type": "string"
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-            "subject": {
+            "textContent": {
                 "type": "string"
             },
-          "category": {
-            "type": "string"
-          },
-          "language": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
+            "tags": {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "enum": Object.values(Tags)
+                }
+            },
+            "subject": {
+                "type": "string",
+                "enum": Object.values(Subject)
+            },
+            "category": {
+                "type": "string"
+            },
+            "language": {
+                "type": "string"
+            },
+            "description": {
+                "type": "string"
+            }
         }
-      }
+    };
 
     // file download as we have it in url
     const response = await axios.get(fileUrl, { responseType: "arraybuffer" });
@@ -88,7 +91,7 @@ async function aiOnPdf(fileUrl: string, prompt: string) {
 
     try {
         const parsedResponse = JSON.parse(result.text) as AIResponse;
-        console.log("JSON RESULT: ", parsedResponse);
+        console.log("GEMINI JSON RESULT: ", parsedResponse);
         return parsedResponse;
     } catch (error) {
         console.error("Failed to parse AI response:", error);
