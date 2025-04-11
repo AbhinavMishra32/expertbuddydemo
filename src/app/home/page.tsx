@@ -165,6 +165,8 @@ export default function Home() {
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {docs.map((doc: Document) => (
+                      <Link
+                      href={`/document/${doc.id}`}>
                       <div key={doc.id} className="bg-white rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">{doc.title}</h3>
                         <p className="text-gray-600 text-sm mb-4 line-clamp-5">{doc.textContent}</p>
@@ -180,6 +182,7 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
+                      </Link>
                     ))}
                   </div>
 

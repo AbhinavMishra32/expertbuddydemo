@@ -32,6 +32,7 @@ export async function saveDoc(userId: string, docData: docDataType) {
         const doc = await prisma.document.create({
             data: {
                 authorId: user.id,
+                authorExtId: userId,
                 textContent,
                 tags,
                 category,

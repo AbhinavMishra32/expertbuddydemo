@@ -34,6 +34,7 @@ model Document {
   description  String?
   tags         Tags[]
   authorId     String
+  authorExtId  String
   author       User     @relation("UploadedDocuments", fields: [authorId], references: [id])
   unlockedBy   User?    @relation("UnlockedDocuments", fields: [unlockedById], references: [id])
   ContentType  String?
