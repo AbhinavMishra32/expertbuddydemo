@@ -12,10 +12,12 @@ export type docDataType = {
     fileUrl: string;
     title: string;
     language: string;
+    wordCount: number;
+    pageCount: number;
 }
 
 export async function saveDoc(userId: string, docData: docDataType) {
-    const { textContent, tags, title, category, subject, description, fileUrl, language } = docData;
+    const { textContent, tags, title, category, subject, description, fileUrl, language, wordCount, pageCount } = docData;
     try {
         console.log("extId: ", userId);
         const user = await prisma.user.findUnique({
@@ -35,8 +37,10 @@ export async function saveDoc(userId: string, docData: docDataType) {
                 category,
                 description,
                 url: fileUrl,
-                title: title || "Untitled Document", // Required field in schema
-                subject: subject || "Untitled Document", // Required field in schema
+                title: title || "Untitled Document",
+                subject: subject || "Untitled Document",
+                WordCount: textContent ? textContent.split(" ").length : wordCount,
+                Pages: pageCount || 0,
             },
         });
         return doc;
