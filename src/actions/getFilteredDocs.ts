@@ -33,12 +33,12 @@ export async function getFilteredDocuments(filters: FilterParams) {
       },
       subject ? { subject } : {},
       category ? { category } : {},
-    //   {
-    //     WordCount: {
-    //       gte: minWords,
-    //       lte: maxWords,
-    //     },
-    //   },
+      {
+        WordCount: {
+          gte: minWords,
+          lte: maxWords,
+        },
+      },
     ],
   };
 

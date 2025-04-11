@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, FileText, Search } from "lucide-react"
 import { getFilteredDocuments } from "@/actions/getFilteredDocs"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Subject } from '@prisma/client'
+import { Document, Subject } from '@prisma/client'
 
 export default function Home() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const [docs, setDocs] = useState<any[]>([])
+  const [docs, setDocs] = useState<Document[]>([])
   const [filters, setFilters] = useState({
     searchQuery: searchParams.get("search") || "",
     subject: searchParams.get("subject") || "",
@@ -33,16 +33,16 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false)
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1)
 
-  useEffect(() => {
     const fetchDocs = async () => {
-      setIsSearching(true)
-      const { docs, totalPages } = await getFilteredDocuments(filters)
-      setDocs(docs)
-      setTotalPages(totalPages)
-      setTotalDocs(totalDocs)
-      setIsSearching(false)
+        setIsSearching(true)
+        const { docs, totalPages } = await getFilteredDocuments(filters)
+        setDocs(docs)
+        setTotalPages(totalPages)
+        setTotalDocs(totalDocs)
+        setIsSearching(false)
     }
 
+  useEffect(() => {
     fetchDocs()
   }, [])
 
@@ -74,6 +74,7 @@ export default function Home() {
     setFilters(updatedFilters)
     setCurrentPage(1)
     updateURL(updatedFilters)
+    fetchDocs();
   }
 
   const handleApplyFilters = () => {
@@ -81,6 +82,7 @@ export default function Home() {
     setFilters(updatedFilters)
     setCurrentPage(1)
     updateURL(updatedFilters)
+    fetchDocs();
   }
 
     return (
@@ -162,7 +164,7 @@ export default function Home() {
               ) : (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {docs.map((doc) => (
+                    {docs.map((doc: Document) => (
                       <div key={doc.id} className="bg-white rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">{doc.title}</h3>
                         <p className="text-gray-600 text-sm mb-4 line-clamp-5">{doc.textContent}</p>
@@ -170,11 +172,11 @@ export default function Home() {
                         <div className="flex items-center justify-between mt-4">
                           <div className="flex items-center gap-1 text-gray-500">
                             <FileText className="w-4 h-4" />
-                            <span className="text-xs">Words: {doc.wordCount}</span>
+                            <span className="text-xs">Words: {doc.WordCount}</span>
                           </div>
                           <div className="flex items-center gap-1 text-gray-500">
                             <FileText className="w-4 h-4" />
-                            <span className="text-xs">Pages: {String(doc.pageCount).padStart(2, "0")}</span>
+                            <span className="text-xs">Pages: {String(doc.Pages).padStart(2, "0")}</span>
                           </div>
                         </div>
                       </div>

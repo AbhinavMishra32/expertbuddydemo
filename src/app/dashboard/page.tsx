@@ -30,7 +30,21 @@ export default function Home() {
     pageCount: 0,
   })
 
-  const handleDocumentUpload = async (textContent: string, tags: Tags[], category: string, subject: Subject, description: string, fileUrl: string, language: string) => {
+  const handleWordPageCount = async (fileUrl: string) => {
+    if (!fileUrl) return;
+
+    const analyzeResult = await analyzePdf(fileUrl);
+    const wordCount = analyzeResult?.wordCount ?? 0;
+    const pageCount = analyzeResult?.pageCount ?? 0;
+
+    setPdfProperties((prevProps) => ({
+      ...prevProps,
+      wordCount,
+      pageCount,
+    }));
+  }
+
+  const handleDocumentUpload = async (textContent: string, tags: Tags[], category: string, subject: Subject, description: string, fileUrl: string, language: string, wordCount: number, pageCount: number) => {
     if (!user?.id) {
       console.error("User not authenticated");
       return;
@@ -43,8 +57,10 @@ export default function Home() {
       subject,
       description,
       fileUrl,
-      title: pdfProperties.title || "Untitled Document", // Optional title
+      title: pdfProperties.title || "Untitled Document",
       language,
+      pageCount: pageCount,
+      wordCount: wordCount
     });
     console.log("Document saved: ", doc);
     alert("Document saved successfully");
@@ -60,7 +76,10 @@ export default function Home() {
         fileUrl,
         "Give all the text that is present in the pdf but just the first 10 lines, also give the tags and the category of the pdf, tell the subject of the pdf and give a short description of the pdf, and the language of the pdf"
       );
-      const { wordCount, pageCount } = await analyzePdf(fileUrl);
+      const analyzeResult = await analyzePdf(fileUrl);
+      const wordCount = analyzeResult?.wordCount ?? 0;
+      const pageCount = analyzeResult?.pageCount ?? 0;
+
       console.log("AI Response: ", result);
       setAiResponse(result || null);
       handleDocumentUpload(
@@ -71,6 +90,10 @@ export default function Home() {
         result.description,
         fileUrl,
         result.language
+          ? result.language
+          : "English",
+        wordCount,
+        pageCount
       );
     } catch (error) {
       console.error("Error analyzing PDF:", error);
@@ -85,8 +108,8 @@ export default function Home() {
       setManualPropSet(false);
       analyzeWithAI();
     } else {
+      handleWordPageCount(fileUrl);
       setManualPropSet(true);
-      // Show form for manual input
     }
   };
 
@@ -136,7 +159,9 @@ export default function Home() {
           <p>Manual form implementation needed here</p>
           <input placeholder="Description" onChange={(e) => setPdfProperties({ ...pdfProperties, description: e.target.value })} />
           <input placeholder="Title" onChange={(e) => setPdfProperties({ ...pdfProperties, title: e.target.value })} />
-          <Select>
+          {/* <Select
+            onValueChange={(value) => setPdfProperties(prev => ({ ...prev, category: value }))}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Choose Category" />
             </SelectTrigger>
@@ -147,28 +172,35 @@ export default function Home() {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
-          <Select>
+          </Select> */}
+          <Select
+            onValueChange={(value) => setPdfProperties(prev => ({ ...prev, subject: value as Subject }))}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Choose Subject" />
               </SelectTrigger>
             <SelectContent>
-              {Object.values(Tags).map((tag) => (
+              {Object.values(Subject).map((tag) => (
                 <SelectItem key={tag} value={tag}>
                   {tag}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <button onClick={() => handleDocumentUpload(
+          <button onClick={() => {
+            console.log("PDF Properties before uploading: ", pdfProperties);
+            handleDocumentUpload(
             "No text detected with non AI solution (pdf parsing)",
-            pdfProperties.tags || [], // tags
-            pdfProperties.category || "Uncategorized", // category
-            pdfProperties.subject || "OTHER", // subject
-            pdfProperties.description, // description
-            fileUrl, // fileUrl
-            "English" // language
-          )}>Upload</button>
+            pdfProperties.tags || [],
+            pdfProperties.category || "Uncategorized",
+            pdfProperties.subject,
+            pdfProperties.description,
+            fileUrl,
+            "English",
+            pdfProperties.wordCount,
+            pdfProperties.pageCount
+          )
+        }}>Upload</button>
         </div>
       )}
     </>
