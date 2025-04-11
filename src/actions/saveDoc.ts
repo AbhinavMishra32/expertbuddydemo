@@ -1,25 +1,27 @@
 'use server';
 import { prisma } from "@/lib/db";
+import { Tags } from "@prisma/client";
+import { Subject } from "@prisma/client";
 
 export type docDataType = {
     textContent: string;
-    tags: string[];
+    tags: Tags[];
     category: string;
-    subject: string;
+    subject: Subject;
     description: string;
     fileUrl: string;
     title: string;
     language: string;
 }
 
-export async function saveDoc(userId: string, docData: docDataType){
+export async function saveDoc(userId: string, docData: docDataType) {
     const { textContent, tags, title, category, subject, description, fileUrl, language } = docData;
     try {
         console.log("extId: ", userId);
         const user = await prisma.user.findUnique({
             where: { extId: userId },
-          });
-          console.log("userId: ", user.id);
+        });
+        console.log("userId: ", user.id);
 
         if (!user) {
             throw new Error("Invalid userId: No such user exists");

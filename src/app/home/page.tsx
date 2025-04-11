@@ -10,72 +10,27 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, FileText, Search } from "lucide-react"
 import { getFilteredDocuments } from "@/actions/getFilteredDocs"
-
-// Mock server action for demo purposes
-// async function getFilteredDocuments(filters: any) {
-//   // This would be replaced with your actual server action
-//   await new Promise((resolve) => setTimeout(resolve, 800)) // Simulate network delay
-
-//   const mockDocs = Array(16)
-//     .fill(null)
-//     .map((_, i) => ({
-//       id: i + 1,
-//       title: "Lorem ipsum dolor sit amet consectetur.",
-//       textContent:
-//         "Lorem ipsum dolor sit amet consectetur. Morbi integer tempus odio ut fusce pulvinar. Purus in eget vitae posuere laoreet nam. Maecenas tincidunt aliquet pretium eu ornare. At ultricies porttitor mauris sem. Mauris leo venenatis.",
-//       subject: "Accounting",
-//       category: i % 3 === 0 ? "Essay" : i % 3 === 1 ? "Research Paper" : "Case Study",
-//       language: "English",
-//       tags: ["Finance", "Analysis"],
-//       wordCount: 514,
-//       pageCount: 2,
-//     }))
-
-//   const startIndex = (filters.page - 1) * filters.pageSize
-//   const endIndex = startIndex + filters.pageSize
-//   const filteredDocs = mockDocs.filter((doc) => {
-//     if (
-//       filters.searchQuery &&
-//       !doc.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) &&
-//       !doc.textContent.toLowerCase().includes(filters.searchQuery.toLowerCase())
-//     ) {
-//       return false
-//     }
-//     if (filters.subject && doc.subject !== filters.subject) {
-//       return false
-//     }
-//     if (filters.category && doc.category !== filters.category) {
-//       return false
-//     }
-//     if (doc.wordCount < filters.minWords || doc.wordCount > filters.maxWords) {
-//       return false
-//     }
-//     return true
-//   })
-
-//   return {
-//     docs: filteredDocs.slice(startIndex, endIndex),
-//     totalPages: Math.ceil(filteredDocs.length / filters.pageSize),
-//     totalDocs: filteredDocs.length,
-//   }
-// }
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function Home() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
   const [docs, setDocs] = useState<any[]>([])
   const [filters, setFilters] = useState({
-    searchQuery: "",
-    subject: "",
-    category: "",
-    minWords: 0,
-    maxWords: 550000,
-    page: 1,
+    searchQuery: searchParams.get("search") || "",
+    subject: searchParams.get("subject") || "",
+    category: searchParams.get("category") || "",
+    minWords: searchParams.get("minWords") ? Number(searchParams.get("minWords")) : 0,
+    maxWords: searchParams.get("maxWords") ? Number(searchParams.get("maxWords")) : 550000,
+    page: Number(searchParams.get("page")) || 1,
     pageSize: 8,
   })
 
   const [totalPages, setTotalPages] = useState(1)
   const [totalDocs, setTotalDocs] = useState(0)
   const [isSearching, setIsSearching] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1)
 
   useEffect(() => {
     const fetchDocs = async () => {
@@ -90,28 +45,48 @@ export default function Home() {
     fetchDocs()
   }, [filters])
 
+  const updateURL = (updatedFilters: typeof filters) => {
+    const params = new URLSearchParams()
+
+    if (updatedFilters.searchQuery) params.set("search", updatedFilters.searchQuery)
+    if (updatedFilters.subject) params.set("subject", updatedFilters.subject)
+    if (updatedFilters.category) params.set("category", updatedFilters.category)
+    if (updatedFilters.minWords > 0) params.set("minWords", updatedFilters.minWords.toString())
+    if (updatedFilters.maxWords < 550000) params.set("maxWords", updatedFilters.maxWords.toString())
+    if (updatedFilters.page > 1) params.set("page", updatedFilters.page.toString())
+
+    const queryString = params.toString()
+    router.push(queryString ? `?${queryString}` : "")
+  }
+
   const handlePageChange = (newPage: number) => {
+    const updatedFilters = { ...filters, page: newPage }
+    setFilters(updatedFilters)
     setCurrentPage(newPage)
-    setFilters((prev) => ({ ...prev, page: newPage }))
+    updateURL(updatedFilters)
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    setFilters((prev) => ({ ...prev, page: 1 }))
+    const updatedFilters = { ...filters, page: 1 }
+    setFilters(updatedFilters)
     setCurrentPage(1)
+    updateURL(updatedFilters)
   }
 
   const handleApplyFilters = () => {
-    setFilters((prev) => ({ ...prev, page: 1 }))
+    const updatedFilters = { ...filters, page: 1 }
+    setFilters(updatedFilters)
     setCurrentPage(1)
+    updateURL(updatedFilters)
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-    {
-            <Header handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
-    }
+      {
+        <Header handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
+      }
 
       {/* Main Content */}
       <main className="flex-grow bg-gray-50 py-12">
@@ -126,12 +101,11 @@ export default function Home() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-800">
-                {filters.searchQuery ? `Search results for "${filters.searchQuery}"` : "Find Writing Inspiration in Our Data Base"}
-                </h2>
+              {filters.searchQuery ? `Search results for "${filters.searchQuery}"` : "Find Writing Inspiration in Our Data Base"}
+            </h2>
           </div>
 
           <div className="flex flex-col md:flex-row gap-6">
-          
 
             {/* Results */}
             <div className="flex-grow">
@@ -203,9 +177,8 @@ export default function Home() {
                             <Button
                               key={i}
                               variant={currentPage === pageNumber ? "default" : "outline"}
-                              className={`h-8 w-8 rounded-md ${
-                                currentPage === pageNumber ? "bg-purple-600 text-white" : ""
-                              }`}
+                              className={`h-8 w-8 rounded-md ${currentPage === pageNumber ? "bg-purple-600 text-white" : ""
+                                }`}
                               onClick={() => handlePageChange(pageNumber)}
                             >
                               {pageNumber}
@@ -252,11 +225,14 @@ export default function Home() {
                 </>
               )}
             </div>
-              {/* Filters */}
-              <div className="w-full md:max-w-72 space-y-6 bg-white p-6 rounded-lg h-fit">
+            {/* Filters */}
+            <div className="w-full md:max-w-72 space-y-6 bg-white p-6 rounded-lg h-fit">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Type of work</label>
-                <Select defaultValue="all">
+                <Select
+                  defaultValue={filters.category || "all"}
+                  onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="All Project Types" />
                   </SelectTrigger>
@@ -271,7 +247,10 @@ export default function Home() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                <Select defaultValue="accounting">
+                <Select
+                  defaultValue={filters.subject || "accounting"}
+                  onValueChange={(value) => setFilters(prev => ({ ...prev, subject: value }))}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Accounting" />
                   </SelectTrigger>
@@ -352,53 +331,53 @@ const Header: React.FC<{
   filters: any;
   setFilters: React.Dispatch<React.SetStateAction<any>>;
 }> = ({ handleSearch, filters, setFilters }) => {
-    return (
+  return (
     <header className="bg-purple-600 text-white">
-    <div className="max-w-7xl mx-auto px-4 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="bg-white rounded-full p-2">
-          </div>
-          <span className="text-xl font-bold">BUDDY</span>
-        </div>
-        <nav className="hidden md:flex items-center gap-6">
-          <Link href="#" className="text-white hover:text-purple-200">
-            Find Tutor
-          </Link>
-          <Link href="#" className="text-white hover:text-purple-200">
-            Become Tutor
-          </Link>
-          <Link href="#" className="text-white hover:text-purple-200">
-            Sign In
-          </Link>
-          <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6">
-            Get Started For Free
-          </Button>
-        </nav>
-      </div>
-
-      <div className="mt-16 mb-24 max-w-3xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Accounting Homework Samples & Study Documents</h1>
-        <p className="text-xl mb-8">Get Access To Our Online Database Of Accounting Writing Samples.</p>
-        <form onSubmit={handleSearch} className="relative">
-          <div className="flex">
-            <div className="relative flex-grow">
-              <Input
-                type="text"
-                placeholder="Find any type of work, topic, etc."
-                className="w-full pl-12 pr-4 py-6 rounded-l-full bg-white text-black"
-                value={filters.searchQuery}
-                onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
-              />
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-white rounded-full p-2">
             </div>
-            <Button type="submit" className="bg-gray-900 hover:bg-gray-800 text-white rounded-r-full px-8">
-              Search
-            </Button>
+            <span className="text-xl font-bold">BUDDY</span>
           </div>
-        </form>
+          <nav className="hidden md:flex items-center gap-6">
+            <Link href="#" className="text-white hover:text-purple-200">
+              Find Tutor
+            </Link>
+            <Link href="#" className="text-white hover:text-purple-200">
+              Become Tutor
+            </Link>
+            <Link href="#" className="text-white hover:text-purple-200">
+              Sign In
+            </Link>
+            <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6">
+              Get Started For Free
+            </Button>
+          </nav>
+        </div>
+
+        <div className="mt-16 mb-24 max-w-3xl">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Accounting Homework Samples & Study Documents</h1>
+          <p className="text-xl mb-8">Get Access To Our Online Database Of Accounting Writing Samples.</p>
+          <form onSubmit={handleSearch} className="relative">
+            <div className="flex">
+              <div className="relative flex-grow">
+                <Input
+                  type="text"
+                  placeholder="Find any type of work, topic, etc."
+                  className="w-full pl-12 pr-4 py-6 rounded-l-full bg-white text-black"
+                  value={filters.searchQuery}
+                  onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
+                />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              </div>
+              <Button type="submit" className="bg-gray-900 hover:bg-gray-800 text-white rounded-r-full px-8">
+                Search
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  </header>
-    )
+    </header>
+  )
 }
