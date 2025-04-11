@@ -13,6 +13,13 @@ export default function Home() {
   const [analysing, setAnalysing] = useState(false);
   const [aiResponse, setAiResponse] = useState<any>(null);
 
+  const [pdfProperties, setPdfProperties] = useState({
+    subject: "" as Subject,
+    tags: [] as Tags[],
+    category: "",
+    description: "",
+  })
+
   const handleDocumentUpload = async (textContent: string, tags: Tags[], category: string, subject: Subject, description: string, fileUrl: string, language: string) => {
     if (!user?.id) {
       console.error("User not authenticated");

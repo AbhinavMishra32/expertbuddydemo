@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, FileText, Search } from "lucide-react"
 import { getFilteredDocuments } from "@/actions/getFilteredDocs"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Subject } from '@prisma/client'
 
 export default function Home() {
   const router = useRouter()
@@ -43,7 +44,7 @@ export default function Home() {
     }
 
     fetchDocs()
-  }, [filters])
+  }, [])
 
   const updateURL = (updatedFilters: typeof filters) => {
     const params = new URLSearchParams()
@@ -82,11 +83,55 @@ export default function Home() {
     updateURL(updatedFilters)
   }
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      {
-        <Header handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
-      }
+    return (
+        <div className="min-h-screen flex flex-col">
+            <header className="bg-purple-600 text-white">
+                <div className="max-w-7xl mx-auto px-4 py-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <div className="bg-white rounded-full p-2">
+                            </div>
+                            <span className="text-xl font-bold">BUDDY</span>
+                        </div>
+                        <nav className="hidden md:flex items-center gap-6">
+                            <Link href="#" className="text-white hover:text-purple-200">
+                                Find Tutor
+                            </Link>
+                            <Link href="#" className="text-white hover:text-purple-200">
+                                Become Tutor
+                            </Link>
+                            <Link href="#" className="text-white hover:text-purple-200">
+                                Sign In
+                            </Link>
+                            <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6">
+                                Get Started For Free
+                            </Button>
+                        </nav>
+                    </div>
+
+        <div className="mt-16 mb-24 max-w-3xl">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Accounting Homework Samples & Study Documents</h1>
+          <p className="text-xl mb-8">Get Access To Our Online Database Of Accounting Writing Samples.</p>
+          <form onSubmit={handleSearch} className="relative">
+            <div className="flex">
+              <div className="relative flex-grow">
+                <Input
+                  type="text"
+                  placeholder="Find any type of work, topic, etc."
+                  className="w-full pl-12 pr-4 py-6 rounded-l-full bg-white text-black"
+                  value={filters.searchQuery}
+                  onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
+                />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              </div>
+              <Button type="submit" className="bg-gray-900 hover:bg-gray-800 text-white rounded-r-full px-8">
+                Search
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </header>
 
       {/* Main Content */}
       <main className="flex-grow bg-gray-50 py-12">
@@ -101,7 +146,7 @@ export default function Home() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-800">
-              {filters.searchQuery ? `Search results for "${filters.searchQuery}"` : "Find Writing Inspiration in Our Data Base"}
+              {searchParams.get("search") ? `Search results for "${searchParams.get("search")}"` : "Find Writing Inspiration in Our Data Base"}
             </h2>
           </div>
 
@@ -248,16 +293,17 @@ export default function Home() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
                 <Select
-                  defaultValue={filters.subject || "accounting"}
                   onValueChange={(value) => setFilters(prev => ({ ...prev, subject: value }))}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Accounting" />
+                    <SelectValue placeholder={searchParams.get("subject") ? searchParams.get("subject") : "Filter by subject"} defaultValue={searchParams.get("subject") || ""} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="accounting">Accounting</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                    <SelectItem value="economics">Economics</SelectItem>
+                    {Object.values(Subject).map((subject) => (
+                        <SelectItem key={subject} value={subject}>
+                            {subject}
+                        </SelectItem>
+                        ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -322,62 +368,5 @@ export default function Home() {
         </div>
       </main>
     </div>
-  )
-}
-
-
-const Header: React.FC<{
-  handleSearch: (e: React.FormEvent) => void;
-  filters: any;
-  setFilters: React.Dispatch<React.SetStateAction<any>>;
-}> = ({ handleSearch, filters, setFilters }) => {
-  return (
-    <header className="bg-purple-600 text-white">
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-white rounded-full p-2">
-            </div>
-            <span className="text-xl font-bold">BUDDY</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="#" className="text-white hover:text-purple-200">
-              Find Tutor
-            </Link>
-            <Link href="#" className="text-white hover:text-purple-200">
-              Become Tutor
-            </Link>
-            <Link href="#" className="text-white hover:text-purple-200">
-              Sign In
-            </Link>
-            <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6">
-              Get Started For Free
-            </Button>
-          </nav>
-        </div>
-
-        <div className="mt-16 mb-24 max-w-3xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Accounting Homework Samples & Study Documents</h1>
-          <p className="text-xl mb-8">Get Access To Our Online Database Of Accounting Writing Samples.</p>
-          <form onSubmit={handleSearch} className="relative">
-            <div className="flex">
-              <div className="relative flex-grow">
-                <Input
-                  type="text"
-                  placeholder="Find any type of work, topic, etc."
-                  className="w-full pl-12 pr-4 py-6 rounded-l-full bg-white text-black"
-                  value={filters.searchQuery}
-                  onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
-                />
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              </div>
-              <Button type="submit" className="bg-gray-900 hover:bg-gray-800 text-white rounded-r-full px-8">
-                Search
-              </Button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </header>
   )
 }
