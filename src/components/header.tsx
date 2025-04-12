@@ -26,14 +26,14 @@ export default function Header({ docProps }: { docProps: Document }) {
       </div>
 
       <div className={`${DMSans.className} mt-10`}>
-        <h1 className='md:text-5xl text-3xl font-bold text-white'>{docProps.title}</h1>
+        <h1 className='sm:text-5xl text-3xl font-bold text-white'>{docProps.title}</h1>
         <div className='flex gap-6'>
-        <p className='text-lg text-white mt-4 font-light flex gap-3'>Document Type:
+        <p className='sm:text-lg text-sm text-white mt-4 font-light flex gap-3'>Document Type:
             <span className='font-semibold'>
                 {docProps.ContentType || "N/A"}
             </span>
         </p>
-        <p className='text-lg text-white mt-4 font-light flex gap-3'>Subject Area:
+        <p className='sm:text-lg text-sm text-white mt-4 font-light flex gap-3'>Subject Area:
             <span className='font-semibold'>
                 {(docProps.subject || "N/A")}
             </span>

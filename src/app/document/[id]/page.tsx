@@ -1,9 +1,11 @@
 import { Document } from "@prisma/client";
 import { fetchDoc } from "@/actions/fetchDoc";
-import { useUser } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Header from "@/components/header";
+import { DMSans } from "@/lib/fonts";
+import PdfView from "@/components/PdfView";
+
 export default async function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
     const { userId } = await auth();
     if (!userId) {
@@ -18,35 +20,27 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 
     return (
         <>
-            <Header docProps={document} />
-            <div className="flex flex-col items-center justify-center h-screen">
-                <h1 className="text-2xl font-bold mb-4">Document Page</h1>
-                {id && <p className="text-lg">Document ID: {id}</p>}
-                {document && (
-                    <div className="mt-4">
-                        <h2 className="text-xl font-semibold">Document Details</h2>
-                        <p className="text-gray-700">Title: {document.title}</p>
-                        <p className="text-gray-700">Description: {document.description}</p>
-                        <p className="text-gray-700">Word Count: {document.WordCount}</p>
-                        <p className="text-gray-700">Page Count: {document.Pages}</p>
+            <div className="h-screen w-screen">
+                <Header docProps={document} />
+                <div className="h-full flex flex-col md:flex-row gap-6 px-6 md:px-20 py-10 bg-[#F5F3EF]">
+                    <div className="bg-white px-8 pt-8 rounded-[40px] md:w-3/4 w-full h-full space-y-6">
+                        <div className="flex justify-center items-center h-10">
+                            <h1 className={`${DMSans.className} w-[50%] h-full text-2xl font-bold flex items-center`}>{document.title}</h1>
+                            <div className="w-[50%] h-full flex justify-end items-center">
+                                {document.tags.map((tag, index) => (
+                                    <span key={index} className="bg-[#CFD7E6] h-full flex items-center w-fit text-sm font-semibold text-gray-700 px-4 py-1 rounded-full mr-2">
+                                        <span className="inline-block w-2 h-2 rounded-full bg-black mr-2 align-middle"></span>
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="w-full bg-[#F5F3EF]">
+                            <PdfView document={document} />
+                        </div>
                     </div>
-                )}
-                <p className="text-gray-600 mt-4">Author: {document.authorExtId}</p>
-                <p className="text-gray-600">Created At: {new Date(document.createdAt).toLocaleDateString()}</p>
-                <p className="text-gray-600">Updated At: {new Date(document.updatedAt).toLocaleDateString()}</p>
-                <p className="text-gray-600">Tags: {document.tags.join(", ")}</p>
-                <p className="text-gray-600">Category: {document.category}</p>
-                <p className="text-gray-600">Subject: {document.subject}</p>
-                {/* <p className="text-gray-600">Language: {document.language}</p> */}
-                {/* <p className="text-gray-600">File URL: {document.url}</p> */}
-                <p className="text-gray-600">Text Content: {document.textContent}</p>
-                {/* <p className="text-gray-600">Unlocked By: {document.unlockedById}</p> */}
-                <p>---------------------------</p>
-                {document.authorExtId === userId && (
-                    <div className="mt-4">
-                        <p className="text-gray-700">You are the author of this document.</p>
-                    </div>
-                )}
+                    <div className="bg-white md:w-1/4 w-full h-full space-y-4"></div>
+                </div>
             </div>
         </>
     )
