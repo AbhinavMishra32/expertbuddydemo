@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -12,6 +13,8 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, FileText, Searc
 import { getFilteredDocuments } from "@/actions/getFilteredDocs"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Document, Subject } from '@prisma/client'
+import HeaderHomePage from "@/components/HeaderHomePage"
+import { DMSans, manrope } from "@/lib/fonts"
 
 export default function Home() {
   const router = useRouter()
@@ -85,53 +88,59 @@ export default function Home() {
     fetchDocs();
   }
 
-    return (
-        <div className="min-h-screen flex flex-col">
-            <header className="bg-purple-600 text-white">
-                <div className="max-w-7xl mx-auto px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <div className="bg-white rounded-full p-2">
-                            </div>
-                            <span className="text-xl font-bold">BUDDY</span>
-                        </div>
-                        <nav className="hidden md:flex items-center gap-6">
-                            <Link href="#" className="text-white hover:text-purple-200">
-                                Find Tutor
-                            </Link>
-                            <Link href="#" className="text-white hover:text-purple-200">
-                                Become Tutor
-                            </Link>
-                            <Link href="#" className="text-white hover:text-purple-200">
-                                Sign In
-                            </Link>
-                            <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6">
-                                Get Started For Free
-                            </Button>
-                        </nav>
-                    </div>
-
-        <div className="mt-16 mb-24 max-w-3xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Accounting Homework Samples & Study Documents</h1>
-          <p className="text-xl mb-8">Get Access To Our Online Database Of Accounting Writing Samples.</p>
-          <form onSubmit={handleSearch} className="relative">
-            <div className="flex">
-              <div className="relative flex-grow">
-                <Input
-                  type="text"
-                  placeholder="Find any type of work, topic, etc."
-                  className="w-full pl-12 pr-4 py-6 rounded-l-full bg-white text-black"
-                  value={filters.searchQuery}
-                  onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
-                />
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              </div>
-              <Button type="submit" className="bg-gray-900 hover:bg-gray-800 text-white rounded-r-full px-8">
-                Search
-              </Button>
-            </div>
-          </form>
+  return (
+    <div className="min-h-screen flex flex-col">
+      <header className="relative bg-[#A414D5] text-white pt-6 h-[450px] lg:px-[140px] px-4 pb-10 overflow-hidden">
+        <Image
+          src="/headerimg.png"
+          alt="Header background"
+          fill
+          className="object-cover mix-blend-multiply pointer-events-none opacity-90 z-0"
+        />
+        <Image
+        src="/heroimage.png"
+        alt="Header background"
+        width={390}
+        height={390}
+        className="absolute bottom-0 md:right-[10%] xl:block hidden z-0"
+         />
+        <div className={`${manrope.className} relative z-10 text-black flex justify-between sm:h-16 h-14 w-full bg-white rounded-full`}>
+          <div className="xl:w-full w-[40%] h-full flex items-center px-6">
+            <Image src="/logo.png" alt="Logo" width={135} height={60} />
+          </div>
+          <div className="w-full flex md:justify-between justify-end items-center p-2">
+            <p className='md:inline hidden'>Find Tutor</p>
+            <p className='md:inline hidden'>Become Tutor</p>
+            <p className='md:inline hidden'>Sign In</p>
+            <button className="rounded-full sm:text-base text-sm bg-black hover:bg-[#A414D5] text-white h-full px-8">
+              Get Started For Free
+            </button>
+          </div>
         </div>
+
+      <div className={`${DMSans.className} mt-10`}>
+        <h1 className='sm:text-5xl text-3xl font-semibold text-white'>Accounting Homework
+          <br/>
+           Samples & Study Documents</h1>
+        <p className='sm:text-lg text-sm text-white mt-4 font-light flex gap-3'>Get Access To Our Online Database Of Accounting Writing Samples.</p>
+      </div>
+
+      <div className={`${DMSans.className} relative z-10 mt-7 flex gap-2 items-center bg-white rounded-full pl-6 pr-2 h-16 w-full max-w-xl shadow-md`}>
+        <svg width="22" height="22" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.4175 24.5006C19.5387 24.5006 24.5009 19.5384 24.5009 13.4172C24.5009 7.29607 19.5387 2.33389 13.4175 2.33389C7.29636 2.33389 2.33418 7.29607 2.33418 13.4172C2.33418 19.5384 7.29636 24.5006 13.4175 24.5006Z" stroke="#6B7B93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M25.6678 25.6671L23.3345 23.3338" stroke="#6B7B93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <form onSubmit={handleSearch} className="flex w-full"> 
+        <input
+          type="text"
+          placeholder="Find any type of work, topic, etc."
+          className="flex-1 bg-transparent outline-none text-gray-600 placeholder-gray-400 ml-2"
+          onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))} 
+        />
+        <button type="submit" className="bg-[#16192C] text-white px-8 py-3 rounded-full ml-2 hover:bg-neutral-700 transition">
+          Search
+        </button>
+        </form>
       </div>
     </header>
 
@@ -139,18 +148,13 @@ export default function Home() {
       <main className="flex-grow bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center mb-8 gap-2">
-            <div className="w-8 h-8 bg-purple-600 rounded-md flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16Z"
-                  fill="white"
-                />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <svg width="60" height="73" viewBox="0 0 60 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.7407 71C14.4618 59.7027 5.77095 47.3316 2.11109 34.5969C0.802087 30.0421 11.4709 38.1774 12.6037 38.9965C13.3478 39.5345 13.4157 39.8494 13.5316 38.2869C13.9471 32.6804 13.2265 26.9705 13.0676 21.3626C12.973 18.023 13.3112 17.1471 16.3153 19.4821C20.7802 22.9524 23.7013 27.7832 27.8785 31.4746C29.65 33.04 29.4793 23.0712 29.5559 22.3915C29.9719 18.7008 30.4908 13.0249 32.8036 9.83139C33.5215 8.84008 39.9673 22.4368 41.9757 20.4401C46.119 16.3209 49.9142 11.6819 53.075 6.78004C53.3143 6.4088 56.6438 -0.606002 56.6438 3.05458C56.6438 12.7352 56.7873 21.7588 58 31.4036" stroke="#A414D5" stroke-width="4" stroke-linecap="round" />
+            </svg>
+            <h2 className={`${DMSans.className} text-2xl flex justify-center w-full font-bold text-gray-800`}>
               {searchParams.get("search") ? `Search results for "${searchParams.get("search")}"` : "Find Writing Inspiration in Our Data Base"}
             </h2>
-          </div>
+            </div>
 
           <div className="flex flex-col md:flex-row gap-6">
 

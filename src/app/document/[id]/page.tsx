@@ -34,10 +34,9 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 
     return (
         <>
-            {/* <div className="h-screen w-screen"> */}
             <Header docProps={document} />
-            <div className="h-full flex flex-col md:flex-row gap-6 px-6 md:px-20 py-10 bg-[#F5F3EF]">
-                <div className="bg-white px-8 pt-8 pb-8 rounded-[40px] md:w-3/4 w-full h-full space-y-6">
+            <div className="h-full flex flex-col md:flex-row gap-6 px-2 lg:px-20 py-10 bg-[#F5F3EF]">
+                <div className="bg-white sm:px-8 px-2 pt-8 pb-8 sm:rounded-[40px] rounded-2xl md:w-3/4 w-full h-full space-y-6">
                     <div className="flex justify-center items-center h-10">
                         <h1 className={`${DMSans.className} w-[50%] h-full text-2xl font-bold flex items-center`}>{document.title}</h1>
                         <div className="w-[50%] h-full flex justify-end items-center">
@@ -53,7 +52,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
                         <PdfView document={document} />
                     </div>
                 </div>
-                <div className="bg-white md:w-1/4 w-full h-fit rounded-[25px] space-y-4 px-4 py-6">
+                <div className="bg-white md:w-1/4 md:min-w-[300px] w-full h-fit rounded-[25px] space-y-4 px-4 py-6">
                     <button className="h-[50px] w-full rounded-full bg-[#A414D5] hover:bg-[#be63dc] text-white">
                         <div className="flex gap-2 justify-center items-center h-full">
                             <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -94,6 +93,9 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
                         <p className="flex gap-2 text-[#6B7B93]">Words:
                             <span className={`font-medium text-black`}> {document.WordCount || 'N/A'}</span>
                         </p>
+                        <p className="flex gap-2 text-[#6B7B93]">Pages:
+                            <span className={`font-medium text-black`}> {document.Pages || 'N/A'}</span>
+                        </p>
                         <p className="flex gap-2 text-[#6B7B93]">Level:
                             <span className={`font-medium text-black`}> {document.Level || 'N/A'}</span>
                         </p>
@@ -115,7 +117,6 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
                     </div>
                 </div>
             </div>
-            {/* </div> */}
         </>
     )
 }
