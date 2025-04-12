@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { DMSans, manrope } from '@/lib/fonts';
 import { Document } from '@prisma/client';
 
-export default function Header(docProps: Document) {
+export default function Header({ docProps }: { docProps: Document }) {
   return (
     <header className="relative bg-[#A414D5] text-white pt-6 lg:px-[140px] px-4 pb-10 overflow-hidden">
       <Image
@@ -26,8 +26,19 @@ export default function Header(docProps: Document) {
       </div>
 
       <div className={`${DMSans.className} mt-10`}>
-        <h1 className='md:text-5xl text-3xl font-bold text-white'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente vero nesciunt, est incidunt unde vitae.</h1>
-        <p className='text-lg text-white mt-4'></p>
+        <h1 className='md:text-5xl text-3xl font-bold text-white'>{docProps.title}</h1>
+        <div className='flex gap-6'>
+        <p className='text-lg text-white mt-4 font-light flex gap-3'>Document Type:
+            <span className='font-semibold'>
+                {docProps.ContentType || "N/A"}
+            </span>
+        </p>
+        <p className='text-lg text-white mt-4 font-light flex gap-3'>Subject Area:
+            <span className='font-semibold'>
+                {(docProps.subject || "N/A")}
+            </span>
+        </p>
+        </div>
       </div>
     </header>
   );

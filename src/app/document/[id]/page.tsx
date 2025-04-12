@@ -18,7 +18,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 
     return (
         <>
-            <Header id={""} url={""} unlockedById={null} textContent={""} title={""} category={""} subject={"Mathematics"} description={null} tags={[]} authorId={""} authorExtId={""} ContentType={null} WordCount={null} Pages={null} Level={null} Language={null} createdAt={undefined} updatedAt={undefined} />
+            <Header docProps={document} />
             <div className="flex flex-col items-center justify-center h-screen">
                 <h1 className="text-2xl font-bold mb-4">Document Page</h1>
                 {id && <p className="text-lg">Document ID: {id}</p>}

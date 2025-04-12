@@ -8,7 +8,7 @@ export const hubotSans = Hubot_Sans({
 });
 
 export const DMSans = DM_Sans({
-    weight: ['400', '500', '700'], 
+    weight: ['100', '200', '300', '400', '500', '700'], 
     style: 'normal',
     subsets: ['latin', 'latin-ext']
 })
