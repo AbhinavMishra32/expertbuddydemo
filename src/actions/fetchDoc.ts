@@ -32,6 +32,7 @@ export async function fetchDoc(docId: string, userId: string) {
         if (!document) {
             throw new Error("Document not found");
         }
+        // console.log("Document in prisma fetched: ", document);
         return {
             ...document,
         }

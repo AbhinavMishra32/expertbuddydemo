@@ -59,8 +59,8 @@ export default function Home() {
       fileUrl,
       title: pdfProperties.title || "Untitled Document",
       language,
-      pageCount: pageCount,
-      wordCount: wordCount
+      pageCount,
+      wordCount
     });
     console.log("Document saved: ", doc);
     alert("Document saved successfully");
