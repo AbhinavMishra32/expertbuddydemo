@@ -148,16 +148,26 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-grow bg-[#F5F3EF] py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center mb-10 h-20 gap-2">
-            <div className="relative w-fit mx-auto h-fit">
-            <svg className="absolute -top-9 -left-10" width="60" height="73" viewBox="0 0 60 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.7407 71C14.4618 59.7027 5.77095 47.3316 2.11109 34.5969C0.802087 30.0421 11.4709 38.1774 12.6037 38.9965C13.3478 39.5345 13.4157 39.8494 13.5316 38.2869C13.9471 32.6804 13.2265 26.9705 13.0676 21.3626C12.973 18.023 13.3112 17.1471 16.3153 19.4821C20.7802 22.9524 23.7013 27.7832 27.8785 31.4746C29.65 33.04 29.4793 23.0712 29.5559 22.3915C29.9719 18.7008 30.4908 13.0249 32.8036 9.83139C33.5215 8.84008 39.9673 22.4368 41.9757 20.4401C46.119 16.3209 49.9142 11.6819 53.075 6.78004C53.3143 6.4088 56.6438 -0.606002 56.6438 3.05458C56.6438 12.7352 56.7873 21.7588 58 31.4036" stroke="#A414D5" stroke-width="4" stroke-linecap="round" />
-            </svg>
-            <h2 className={`${DMSans.className} text-4xl flex justify-center w-full font-bold text-gray-800`}>
-              {searchParams.get("search") ? `Search results for "${searchParams.get("search")}"` : "Find Writing Inspiration in Our Data Base"}
-            </h2>
-            </div>
-            </div>
+          <div className="flex items-center mb-10 h-4 lg:h-20 gap-2">
+            {searchParams.get("search") ? (
+              <div className="relative w-fit h-fit">
+                <h2 className={`${DMSans.className} md:text-4xl sm:text-2xl text-xl flex w-full font-bold text-gray-800`}>
+                  {`Search results for "${searchParams.get("search")}"`}
+                </h2>
+                <p className={`${DMSans.className} text-[#A414D5] text-xl mt-2 font-semibold`}>{docs.length} results</p>
+              </div>
+            ) : (
+              <div className="relative w-fit mx-auto h-fit">
+                <svg className="absolute -top-9 -left-10" width="60" height="73" viewBox="0 0 60 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.7407 71C14.4618 59.7027 5.77095 47.3316 2.11109 34.5969C0.802087 30.0421 11.4709 38.1774 12.6037 38.9965C13.3478 39.5345 13.4157 39.8494 13.5316 38.2869C13.9471 32.6804 13.2265 26.9705 13.0676 21.3626C12.973 18.023 13.3112 17.1471 16.3153 19.4821C20.7802 22.9524 23.7013 27.7832 27.8785 31.4746C29.65 33.04 29.4793 23.0712 29.5559 22.3915C29.9719 18.7008 30.4908 13.0249 32.8036 9.83139C33.5215 8.84008 39.9673 22.4368 41.9757 20.4401C46.119 16.3209 49.9142 11.6819 53.075 6.78004C53.3143 6.4088 56.6438 -0.606002 56.6438 3.05458C56.6438 12.7352 56.7873 21.7588 58 31.4036" stroke="#A414D5" stroke-width="4" stroke-linecap="round" />
+                </svg>
+                <h2 className={`${DMSans.className} md:text-4xl sm:text-2xl text-xl flex justify-center w-full font-bold text-gray-800`}>
+                  {/* {searchParams.get("search") ? `Search results for "${searchParams.get("search")}"` : "Find Writing Inspiration in Our Data Base"} */}
+                  Find Writing Inspiration in Our Data Base
+                </h2>
+              </div>
+            )}
+          </div>
 
           <div className="flex flex-col md:flex-row gap-6">
 
@@ -174,7 +184,7 @@ export default function Home() {
                     {docs.map((doc: Document) => (
                       <Link
                       href={`/document/${doc.id}`}>
-                      <div key={doc.id} className="bg-white hover:ring-2 ring-[#A414D5] rounded-[25px] p-6 hover:shadow-lg transition-shadow">
+                      <div key={doc.id} className="bg-white ring-2 ring-[#3829A3] ring-opacity-[3%] hover:ring-[#A414D5] rounded-[25px] p-6 hover:shadow-lg transition-shadow">
                         <h3 className="text-xl font-semibold text-gray-800 mb-2">{doc.title}</h3>
                         <p className="text-[#727982] text-sm font-light mb-4 line-clamp-6">{doc.textContent}</p>
                         <Separator className="bg-[#E1D5C9]" />
@@ -296,9 +306,9 @@ export default function Home() {
               )}
             </div>
             {/* Filters */}
-            <div className="w-full md:w-72 md:min-w-72 space-y-6 bg-white p-6 rounded-[25px] h-fit">
+            <div className={`${DMSans.className} w-full md:w-72 md:min-w-72 space-y-6 bg-white py-6 px-4 rounded-[25px] h-fit`}>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Type of work</label>
+                <label className="block text-sm font-medium text-gray-800 mb-2">Type of work</label>
                 <Select
                   defaultValue={filters.category || "all"}
                   onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}
@@ -316,7 +326,7 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                <label className="block text-sm font-medium text-gray-800 mb-2">Subject</label>
                 <Select
                   onValueChange={(value) => setFilters(prev => ({ ...prev, subject: value }))}
                 >
@@ -334,7 +344,7 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Type of work</label>
+                <label className="block text-sm font-medium text-gray-800 mb-2">Type of work</label>
                 <Select defaultValue="any">
                   <SelectTrigger className="w-full h-12 rounded-[12px]">
                     <SelectValue placeholder="Any Academic Level" />
@@ -382,10 +392,10 @@ export default function Home() {
                     <span className="text-xs text-gray-500 mt-1">To {filters.maxWords}</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-4">1 Page ≈ 275 Words</p>
+                <p className="text-xs text-gray-500 mt-2">1 Page ≈ 275 Words</p>
               </div>
 
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={handleApplyFilters}>
+              <Button className="w-full rounded-full h-12 bg-[#A414D5] hover:bg-fuchsia-600 text-white" onClick={handleApplyFilters}>
                 Apply
               </Button>
             </div>
