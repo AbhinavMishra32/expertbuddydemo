@@ -69,7 +69,8 @@ export default function Home() {
     setFilters(updatedFilters)
     setCurrentPage(newPage)
     updateURL(updatedFilters)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    fetchDocs();
+    // window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const handleSearch = (e: React.FormEvent) => {

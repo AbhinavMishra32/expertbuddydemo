@@ -15,7 +15,7 @@ if (!GEMINI_API_KEY) {
     throw new Error("Missing NEXT_PUBLIC_GEMINI_API_KEY in environment variables")
 }
 
-type AIResponse = {
+export type AIResponse = {
     textContent: string;
     tags: Tags[];
     category: string;

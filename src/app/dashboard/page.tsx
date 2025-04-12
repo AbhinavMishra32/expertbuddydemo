@@ -5,20 +5,29 @@ import { DMSans } from "@/lib/fonts";
 import Image from "next/image";
 import { UploadDropzone } from "@/utils/uploadthings";
 import { Subject, Tags } from "@prisma/client";
+import aiOnPdf, { AIResponse } from "@/utils/utils";
+import { saveDoc } from "@/actions/saveDoc";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 // Assuming UploadDropzone is imported from your library
 const UploadPage = () => {
+  const { isLoaded, user } = useUser();
   const [uploading, setUploading] = useState(false);
   const [uploadDone, setUploadDone] = useState(false);
   const [analysing, setAnalysing] = useState(false);
   const [fileUrl, setFileUrl] = useState("");
-  const [aiResponse, setAiResponse] = useState(null);
+  const [aiResponse, setAiResponse] = useState<AIResponse | null>(null);
   const [manualPropSet, setManualPropSet] = useState(false);
+  const [savingDocument, setSavingDocument] = useState(false);
+  const [savedDocument, setSavedDocument] = useState(false);
+
+  const router = useRouter();
   
   const [pdfProperties, setPdfProperties] = useState({
     textContent: "",
     subject: "",
-    tags: [],
+    tags: [] as Tags[],
     category: "",
     description: "",
     title: "",
@@ -27,33 +36,51 @@ const UploadPage = () => {
     language: "English"
   });
 
-  const handleUserChoice = (useAI) => {
+  const handleUserChoice = async (useAI: boolean) => {
     if (useAI) {
       setManualPropSet(false);
       setAnalysing(true);
-      // Simulate AI analysis
-      setTimeout(() => {
+      const result = await aiOnPdf(
+        fileUrl,
+        "Give all the text that is present in the pdf but just the first 10 lines, also give the tags and the category of the pdf, tell the subject of the pdf and give a short description of the pdf, and the language of the pdf"
+      );
         setAnalysing(false);
         setAiResponse({
-          category: "Academic",
-          description: "Computer organization document covering memory hierarchy and architecture",
-          language: "English",
-          subject: "ENGINEERING",
-          tags: ["Computer Science", "Memory Architecture", "RAM"],
-          textContent: "Sample text content from the document..."
+          category: result.category,
+          description: result.description,
+          language: result.language,
+          subject: result.subject,
+          tags: result.tags as Tags[],
+          textContent: result.textContent
         });
-      }, 2000);
     } else {
       setManualPropSet(true);
     }
   };
 
-  const handleDocumentUpload = () => {
-    alert("Document saved successfully!");
+  const handleDocumentUpload = async () => {
+    if (!user?.id) {
+      console.error("User not authenticated");
+      return;
+    }
+    setSavingDocument(true);
+    const doc = await saveDoc(user.id, {
+      textContent: aiResponse?.textContent || "",
+      tags: aiResponse?.tags || [],
+      category: aiResponse?.category || "",
+      subject: aiResponse?.subject as Subject || "",
+      description: aiResponse?.description || "",
+      fileUrl,
+      title: pdfProperties.title || "Untitled Document",
+      language: pdfProperties.language || "English",
+      pageCount: pdfProperties.pageCount || 0,
+      wordCount: pdfProperties.wordCount || 0,
+    });
+    setSavedDocument(true);
   };
 
-  const subjects = Object.apply(Subject);
-  const tagOptions = Object.apply(Tags);
+  const subjects = Object.values(Subject);
+  const tagOptions = Object.values(Tags);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -92,7 +119,7 @@ const UploadPage = () => {
       </div>
 
       {/* Upload Section */}
-      <div className="max-w-4xl mx-auto -mt-8 bg-white rounded-lg shadow-lg overflow-hidden mb-8 mx-4 sm:mx-auto">
+      <div className="max-w-4xl mx-auto -mt-8 bg-white rounded-lg shadow-lg overflow-hidden mb-8 sm:mx-auto">
         {/* Progress Indicator */}
         <div className="bg-gray-50 px-6 py-4 border-b">
           <div className="flex items-center justify-between max-w-md mx-auto">
@@ -109,14 +136,16 @@ const UploadPage = () => {
               </div>
               <span className="text-xs mt-1">Details</span>
             </div>
-            <div className={`h-1 flex-1 mx-2 ${(aiResponse || manualPropSet) ? 'bg-[#A414D5]' : 'bg-gray-300'}`}></div>
+            <div className={`h-1 flex-1 mx-2 ${savedDocument ? 'bg-green-500' : 'bg-gray-300'}`}></div>
             <div className="flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-gray-300 text-white">3</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${savedDocument ? 'bg-green-500' : 'bg-gray-300'} text-white`}>
+                {(aiResponse || manualPropSet) ? <Check size={18} /> : '2'}
+              </div>
               <span className="text-xs mt-1">Complete</span>
             </div>
           </div>
         </div>
-        
+
         {/* Upload Dropzone */}
         {!uploadDone && (
           <div className="p-6">
@@ -201,7 +230,7 @@ const UploadPage = () => {
         )}
         
         {/* AI Results */}
-        {aiResponse && (
+        {aiResponse && !savedDocument && (
           <div className="p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Document Details (AI Generated)</h2>
             
@@ -231,7 +260,7 @@ const UploadPage = () => {
                   <select 
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#A414D5] focus:ring focus:ring-[#A414D5] focus:ring-opacity-50"
                     value={aiResponse.subject}
-                    onChange={(e) => setAiResponse({...aiResponse, subject: e.target.value})}
+                    onChange={(e) => setAiResponse({...aiResponse, subject: e.target.value as Subject})}
                   >
                     {subjects.map(subject => (
                       <option key={subject} value={subject}>{subject}</option>
@@ -353,7 +382,7 @@ const UploadPage = () => {
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Tags (select all that apply)</label>
                   <div className="flex flex-wrap gap-2">
-                    {tagOptions.map((tag, index) => (
+                    {tagOptions.map((tag: Tags, index: number) => (
                       <button 
                         key={index}
                         className={`text-sm px-3 py-1 rounded-full transition-colors ${
@@ -411,9 +440,29 @@ const UploadPage = () => {
                   className="px-6 py-2 bg-[#A414D5] text-white rounded-md hover:bg-purple-700"
                   onClick={handleDocumentUpload}
                 >
-                  Save Document
+                  {savingDocument ? <Loader className="animate-spin" size={16} /> : 'Save Document'}
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+        
+        {savedDocument && (
+          <div className="p-6 text-center">
+            <div className="bg-green-50 border border-green-200 p-4 rounded-lg mb-6 flex items-start">
+              <Check className="text-green-500 mr-2 mt-1 flex-shrink-0" />
+              <div>
+                <p className="text-green-700 font-medium">Document saved successfully!</p>
+                <p className="text-green-600 text-sm">Thank you for sharing your document with us.</p>
+              </div>
+            </div>
+            <div className="flex justify-center mt-6">
+              <button 
+                className="bg-[#A414D5] text-white px-8 py-3 rounded-md font-medium hover:bg-purple-700 transition-colors shadow-sm flex items-center justify-center"
+                onClick={() => router.push('/home')}
+              >
+                Go to Dashboard
+              </button>
             </div>
           </div>
         )}
