@@ -91,59 +91,92 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="relative bg-[#A414D5] text-white pt-6 sm:h-[450px] h-fit lg:px-[140px] px-4 pb-10 overflow-hidden">
-        <Image
-          src="/headerimg.png"
-          alt="Header background"
-          fill
-          className="object-cover mix-blend-multiply pointer-events-none opacity-90 z-0"
-        />
-        <Image
-        src="/heroimage.png"
-        alt="Header background"
-        width={390}
-        height={390}
-        className="absolute bottom-0 md:right-[10%] xl:block hidden z-0"
-         />
-        <div className={`${manrope.className} relative z-10 text-black flex justify-between sm:h-16 h-14 w-full bg-white rounded-full`}>
-          <div className="xl:w-full w-[40%] h-full flex items-center px-6">
-            <Image src="/logo.png" alt="Logo" width={135} height={60} />
+      {searchParams.get("search") ? (
+        <header className="relative bg-[#A414D5] text-white sm:h-[150px] h-[90px] lg:px-[140px] px-4 overflow-hidden">
+          <Image
+            src="/headerimg.png"
+            alt="Header background"
+            fill
+            className="object-cover mix-blend-multiply pointer-events-none opacity-90 z-0"
+          />
+            <div className={`${DMSans.className} flex justify-between items-center h-full`}>
+            <h1 className='w-full sm:text-5xl text-xl font-semibold text-white mr-2'>StudyBank</h1>
+            <div className="w-full flex flex-row gap-3 items-center justify-end text-nowrap">
+              <button className="relative z-10 flex gap-2 font-semibold sm:text-base text-xs w-fit h-fit sm:px-8 sm:py-4 px-4 py-2 bg-white rounded-full text-black">
+              <span>
+                <svg className="w-4 h-4 sm:w-6 sm:h-6 " width="23" height="23" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3307 21.3346C12.3307 19.3096 13.9724 17.668 15.9974 17.668C18.0224 17.668 19.6641 19.3096 19.6641 21.3346C19.6641 23.3597 18.0224 25.0013 15.9974 25.0013C13.9724 25.0013 12.3307 23.3597 12.3307 21.3346ZM15.9974 19.668C15.0769 19.668 14.3307 20.4142 14.3307 21.3346C14.3307 22.2551 15.0769 23.0013 15.9974 23.0013C16.9179 23.0013 17.6641 22.2551 17.6641 21.3346C17.6641 20.4142 16.9179 19.668 15.9974 19.668Z" fill="#A414D5" />
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.9974 10.668C8.9974 6.80198 12.1314 3.66797 15.9974 3.66797C19.2577 3.66797 21.9998 5.89786 22.7769 8.91723C22.9146 9.45208 23.4598 9.77407 23.9946 9.63641C24.5295 9.49874 24.8515 8.95356 24.7138 8.41871C23.7148 4.53716 20.1924 1.66797 15.9974 1.66797C11.0268 1.66797 6.9974 5.69741 6.9974 10.668V12.405C6.69495 12.4263 6.4099 12.4539 6.14173 12.49C4.94159 12.6514 3.93109 12.9965 3.12853 13.7991C2.32598 14.6017 1.98078 15.6122 1.81943 16.8123C1.66401 17.9683 1.66404 19.438 1.66406 21.2615V21.4078C1.66404 23.2312 1.66401 24.701 1.81943 25.857C1.98078 27.0571 2.32598 28.0676 3.12853 28.8702C3.93109 29.6727 4.94159 30.0179 6.14173 30.1793C7.29769 30.3347 8.76745 30.3347 10.5909 30.3346H21.4039C23.2273 30.3347 24.6971 30.3347 25.8531 30.1793C27.0532 30.0179 28.0637 29.6727 28.8663 28.8702C29.6688 28.0676 30.014 27.0571 30.1754 25.857C30.3308 24.701 30.3308 23.2312 30.3307 21.4078V21.2615C30.3308 19.438 30.3308 17.9683 30.1754 16.8123C30.014 15.6122 29.6688 14.6017 28.8663 13.7991C28.0637 12.9965 27.0532 12.6514 25.8531 12.49C24.6971 12.3346 23.2274 12.3346 21.4039 12.3346H10.5909C10.0262 12.3346 9.49543 12.3346 8.9974 12.3392V10.668ZM6.40823 14.4722C5.42986 14.6037 4.91176 14.8443 4.54274 15.2133C4.17373 15.5823 3.93313 16.1004 3.80159 17.0788C3.66619 18.0859 3.66406 19.4207 3.66406 21.3346C3.66406 23.2485 3.66619 24.5833 3.80159 25.5905C3.93313 26.5688 4.17373 27.0869 4.54274 27.456C4.91176 27.825 5.42986 28.0656 6.40822 28.1971C7.41536 28.3325 8.75018 28.3346 10.6641 28.3346H21.3307C23.2446 28.3346 24.5794 28.3325 25.5866 28.1971C26.5649 28.0656 27.083 27.825 27.4521 27.456C27.8211 27.0869 28.0617 26.5688 28.1932 25.5905C28.3286 24.5833 28.3307 23.2485 28.3307 21.3346C28.3307 19.4207 28.3286 18.0859 28.1932 17.0788C28.0617 16.1004 27.8211 15.5823 27.4521 15.2133C27.083 14.8443 26.5649 14.6037 25.5866 14.4722C24.5794 14.3368 23.2446 14.3346 21.3307 14.3346H10.6641C8.75018 14.3346 7.41536 14.3368 6.40823 14.4722Z" fill="#A414D5" />
+                </svg>
+                </span>
+                Unlocked Docs</button>
+              <button className="relative z-10 flex gap-2 font-semibold sm:text-base text-xs w-fit h-fit sm:px-8 sm:py-4 px-4 py-2 bg-white rounded-full text-black">
+                <span>
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6" width="23" height="23" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3307 21.3346C12.3307 19.3096 13.9724 17.668 15.9974 17.668C18.0224 17.668 19.6641 19.3096 19.6641 21.3346C19.6641 23.3597 18.0224 25.0013 15.9974 25.0013C13.9724 25.0013 12.3307 23.3597 12.3307 21.3346ZM15.9974 19.668C15.0769 19.668 14.3307 20.4142 14.3307 21.3346C14.3307 22.2551 15.0769 23.0013 15.9974 23.0013C16.9179 23.0013 17.6641 22.2551 17.6641 21.3346C17.6641 20.4142 16.9179 19.668 15.9974 19.668Z" fill="#A414D5" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.9974 10.668C8.9974 6.80198 12.1314 3.66797 15.9974 3.66797C19.2577 3.66797 21.9998 5.89786 22.7769 8.91723C22.9146 9.45208 23.4598 9.77407 23.9946 9.63641C24.5295 9.49874 24.8515 8.95356 24.7138 8.41871C23.7148 4.53716 20.1924 1.66797 15.9974 1.66797C11.0268 1.66797 6.9974 5.69741 6.9974 10.668V12.405C6.69495 12.4263 6.4099 12.4539 6.14173 12.49C4.94159 12.6514 3.93109 12.9965 3.12853 13.7991C2.32598 14.6017 1.98078 15.6122 1.81943 16.8123C1.66401 17.9683 1.66404 19.438 1.66406 21.2615V21.4078C1.66404 23.2312 1.66401 24.701 1.81943 25.857C1.98078 27.0571 2.32598 28.0676 3.12853 28.8702C3.93109 29.6727 4.94159 30.0179 6.14173 30.1793C7.29769 30.3347 8.76745 30.3347 10.5909 30.3346H21.4039C23.2273 30.3347 24.6971 30.3347 25.8531 30.1793C27.0532 30.0179 28.0637 29.6727 28.8663 28.8702C29.6688 28.0676 30.014 27.0571 30.1754 25.857C30.3308 24.701 30.3308 23.2312 30.3307 21.4078V21.2615C30.3308 19.438 30.3308 17.9683 30.1754 16.8123C30.014 15.6122 29.6688 14.6017 28.8663 13.7991C28.0637 12.9965 27.0532 12.6514 25.8531 12.49C24.6971 12.3346 23.2274 12.3346 21.4039 12.3346H10.5909C10.0262 12.3346 9.49543 12.3346 8.9974 12.3392V10.668ZM6.40823 14.4722C5.42986 14.6037 4.91176 14.8443 4.54274 15.2133C4.17373 15.5823 3.93313 16.1004 3.80159 17.0788C3.66619 18.0859 3.66406 19.4207 3.66406 21.3346C3.66406 23.2485 3.66619 24.5833 3.80159 25.5905C3.93313 26.5688 4.17373 27.0869 4.54274 27.456C4.91176 27.825 5.42986 28.0656 6.40822 28.1971C7.41536 28.3325 8.75018 28.3346 10.6641 28.3346H21.3307C23.2446 28.3346 24.5794 28.3325 25.5866 28.1971C26.5649 28.0656 27.083 27.825 27.4521 27.456C27.8211 27.0869 28.0617 26.5688 28.1932 25.5905C28.3286 24.5833 28.3307 23.2485 28.3307 21.3346C28.3307 19.4207 28.3286 18.0859 28.1932 17.0788C28.0617 16.1004 27.8211 15.5823 27.4521 15.2133C27.083 14.8443 26.5649 14.6037 25.5866 14.4722C24.5794 14.3368 23.2446 14.3346 21.3307 14.3346H10.6641C8.75018 14.3346 7.41536 14.3368 6.40823 14.4722Z" fill="#A414D5" />
+                  </svg>
+                </span>
+                Uploaded Docs
+                </button>
+            </div>
           </div>
-          <div className="w-full flex md:justify-between justify-end items-center p-2">
-            <p className='md:inline hidden'>Find Tutor</p>
-            <p className='md:inline hidden'>Become Tutor</p>
-            <p className='md:inline hidden'>Sign In</p>
-            <button className="rounded-full sm:text-base text-sm bg-black hover:bg-[#A414D5] text-white h-full px-8">
-              Get Started For Free
-            </button>
+        </header>
+      ) : (
+        <header className="relative bg-[#A414D5] text-white pt-6 sm:h-[450px] h-fit lg:px-[140px] px-4 pb-10 overflow-hidden">
+          <Image
+            src="/headerimg.png"
+            alt="Header background"
+            fill
+            className="object-cover mix-blend-multiply pointer-events-none opacity-90 z-0"
+          />
+          <Image
+            src="/heroimage.png"
+            alt="Header background"
+            width={390}
+            height={390}
+            className="absolute bottom-0 md:right-[10%] xl:block hidden z-0"
+          />
+          <div className={`${manrope.className} relative z-10 text-black flex justify-between sm:h-16 h-14 w-full bg-white rounded-full`}>
+            <div className="xl:w-full w-[40%] h-full flex items-center px-6">
+              <Image src="/logo.png" alt="Logo" width={135} height={60} />
+            </div>
+            <div className="w-full flex md:justify-between justify-end items-center p-2">
+              <p className='md:inline hidden'>Find Tutor</p>
+              <p className='md:inline hidden'>Become Tutor</p>
+              <p className='md:inline hidden'>Sign In</p>
+              <button className="rounded-full sm:text-base text-sm bg-black hover:bg-[#A414D5] text-white h-full px-8">
+                Get Started For Free
+              </button>
+            </div>
           </div>
-        </div>
 
-      <div className={`${DMSans.className} mt-10`}>
-        <h1 className='sm:text-5xl text-3xl font-semibold text-white'>Accounting Homework
-          <br/>
-           Samples & Study Documents</h1>
-        <p className='sm:text-lg text-sm text-white mt-4 font-light flex gap-3'>Get Access To Our Online Database Of Accounting Writing Samples.</p>
-      </div>
+          <div className={`${DMSans.className} mt-10`}>
+            <h1 className='sm:text-5xl text-3xl font-semibold text-white'>Accounting Homework
+              <br />
+              Samples & Study Documents</h1>
+            <p className='sm:text-lg text-sm text-white mt-4 font-light flex gap-3'>Get Access To Our Online Database Of Accounting Writing Samples.</p>
+          </div>
+          <div className={`${DMSans.className} relative z-10 mt-7 flex gap-2 items-center bg-white rounded-full pl-6 pr-2 h-16 w-full max-w-xl shadow-md`}>
+            <svg width="22" height="22" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.4175 24.5006C19.5387 24.5006 24.5009 19.5384 24.5009 13.4172C24.5009 7.29607 19.5387 2.33389 13.4175 2.33389C7.29636 2.33389 2.33418 7.29607 2.33418 13.4172C2.33418 19.5384 7.29636 24.5006 13.4175 24.5006Z" stroke="#6B7B93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M25.6678 25.6671L23.3345 23.3338" stroke="#6B7B93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <form onSubmit={handleSearch} className="flex w-full">
+              <input
+                type="text"
+                placeholder="Find any type of work, topic, etc."
+                className="flex-1 bg-transparent outline-none text-gray-600 placeholder-gray-400 ml-2"
+                onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
+              />
+              <button type="submit" className="bg-[#16192C] text-white px-8 py-3 rounded-full ml-2 hover:bg-neutral-700 transition">
+                Search
+              </button>
+            </form>
+          </div>
+        </header>
+      )}
 
-      <div className={`${DMSans.className} relative z-10 mt-7 flex gap-2 items-center bg-white rounded-full pl-6 pr-2 h-16 w-full max-w-xl shadow-md`}>
-        <svg width="22" height="22" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13.4175 24.5006C19.5387 24.5006 24.5009 19.5384 24.5009 13.4172C24.5009 7.29607 19.5387 2.33389 13.4175 2.33389C7.29636 2.33389 2.33418 7.29607 2.33418 13.4172C2.33418 19.5384 7.29636 24.5006 13.4175 24.5006Z" stroke="#6B7B93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M25.6678 25.6671L23.3345 23.3338" stroke="#6B7B93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <form onSubmit={handleSearch} className="flex w-full"> 
-        <input
-          type="text"
-          placeholder="Find any type of work, topic, etc."
-          className="flex-1 bg-transparent outline-none text-gray-600 placeholder-gray-400 ml-2"
-          onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))} 
-        />
-        <button type="submit" className="bg-[#16192C] text-white px-8 py-3 rounded-full ml-2 hover:bg-neutral-700 transition">
-          Search
-        </button>
-        </form>
-      </div>
-    </header>
 
       {/* Main Content */}
       <main className="flex-grow bg-[#F5F3EF] py-12">

@@ -26,20 +26,11 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${sen.variable} antialiased`}>
           <ThemeProvider>
-            {/* <SidebarProvider> */}
-            <div className='flex w-screen relative'>
-              {/* <SdSidebar /> */}
-              <div className="absolute top-0 right-0 z-50 m-3 flex items-center justify-center gap-3">
                 <ThemeSelectorButton />
                 <UserProfileButton />
-              </div>
-              <div className='flex flex-col w-full bg-gray-50 dark:bg-neutral-950'>
                 {children}
-              </div>
-            </div>
-            {/* </SidebarProvider> */}
           </ThemeProvider>
-        </body>
+          </body>
       </html>
     </ClerkProvider>
   );
