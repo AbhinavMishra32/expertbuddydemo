@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Document, Subject } from '@prisma/client'
 import HeaderHomePage from "@/components/HeaderHomePage"
 import { DMSans, manrope } from "@/lib/fonts"
+import { Separator } from "@/components/ui/separator"
 
 export default function Home() {
   const router = useRouter()
@@ -26,7 +27,7 @@ export default function Home() {
     subject: searchParams.get("subject") || "",
     category: searchParams.get("category") || "",
     minWords: searchParams.get("minWords") ? Number(searchParams.get("minWords")) : 0,
-    maxWords: searchParams.get("maxWords") ? Number(searchParams.get("maxWords")) : 550000,
+    maxWords: searchParams.get("maxWords") ? Number(searchParams.get("maxWords")) : 30000,
     page: Number(searchParams.get("page")) || 1,
     pageSize: 8,
   })
@@ -90,7 +91,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="relative bg-[#A414D5] text-white pt-6 h-[450px] lg:px-[140px] px-4 pb-10 overflow-hidden">
+      <header className="relative bg-[#A414D5] text-white pt-6 sm:h-[450px] h-fit lg:px-[140px] px-4 pb-10 overflow-hidden">
         <Image
           src="/headerimg.png"
           alt="Header background"
@@ -145,15 +146,17 @@ export default function Home() {
     </header>
 
       {/* Main Content */}
-      <main className="flex-grow bg-gray-50 py-12">
+      <main className="flex-grow bg-[#F5F3EF] py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center mb-8 gap-2">
-            <svg width="60" height="73" viewBox="0 0 60 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="flex items-center mb-10 h-20 gap-2">
+            <div className="relative w-fit mx-auto h-fit">
+            <svg className="absolute -top-9 -left-10" width="60" height="73" viewBox="0 0 60 73" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M20.7407 71C14.4618 59.7027 5.77095 47.3316 2.11109 34.5969C0.802087 30.0421 11.4709 38.1774 12.6037 38.9965C13.3478 39.5345 13.4157 39.8494 13.5316 38.2869C13.9471 32.6804 13.2265 26.9705 13.0676 21.3626C12.973 18.023 13.3112 17.1471 16.3153 19.4821C20.7802 22.9524 23.7013 27.7832 27.8785 31.4746C29.65 33.04 29.4793 23.0712 29.5559 22.3915C29.9719 18.7008 30.4908 13.0249 32.8036 9.83139C33.5215 8.84008 39.9673 22.4368 41.9757 20.4401C46.119 16.3209 49.9142 11.6819 53.075 6.78004C53.3143 6.4088 56.6438 -0.606002 56.6438 3.05458C56.6438 12.7352 56.7873 21.7588 58 31.4036" stroke="#A414D5" stroke-width="4" stroke-linecap="round" />
             </svg>
-            <h2 className={`${DMSans.className} text-2xl flex justify-center w-full font-bold text-gray-800`}>
+            <h2 className={`${DMSans.className} text-4xl flex justify-center w-full font-bold text-gray-800`}>
               {searchParams.get("search") ? `Search results for "${searchParams.get("search")}"` : "Find Writing Inspiration in Our Data Base"}
             </h2>
+            </div>
             </div>
 
           <div className="flex flex-col md:flex-row gap-6">
@@ -167,28 +170,41 @@ export default function Home() {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className={`${DMSans.className} grid grid-cols-1 lg:grid-cols-2 gap-6`}>
                     {docs.map((doc: Document) => (
                       <Link
                       href={`/document/${doc.id}`}>
-                      <div key={doc.id} className="bg-white rounded-lg p-6 hover:shadow-md transition-shadow">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">{doc.title}</h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-5">{doc.textContent}</p>
+                      <div key={doc.id} className="bg-white hover:ring-2 ring-[#A414D5] rounded-[25px] p-6 hover:shadow-lg transition-shadow">
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">{doc.title}</h3>
+                        <p className="text-[#727982] text-sm font-light mb-4 line-clamp-6">{doc.textContent}</p>
+                        <Separator className="bg-[#E1D5C9]" />
 
-                        <div className="flex items-center justify-between mt-4">
-                          <div className="flex items-center gap-1 text-gray-500">
-                            <FileText className="w-4 h-4" />
-                            <span className="text-xs">Words: {doc.WordCount}</span>
-                          </div>
-                          <div className="flex items-center gap-1 text-gray-500">
-                            <FileText className="w-4 h-4" />
-                            <span className="text-xs">Pages: {String(doc.Pages).padStart(2, "0")}</span>
+                          <div className="flex items-center justify-between mt-4">
+                            <div className="flex items-center gap-1 text-gray-500">
+                              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 12.2H15" stroke="#A414D5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8 16.2H12.38" stroke="#A414D5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M10 6H14C16 6 16 5 16 4C16 2 15 2 14 2H10C9 2 8 2 8 4C8 6 9 6 10 6Z" stroke="#A414D5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M16 4.02002C19.33 4.20002 21 5.43002 21 10V16C21 20 20 22 15 22H9C4 22 3 20 3 16V10C3 5.44002 4.67 4.20002 8 4.02002" stroke="#A414D5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                              <span className="text-sm ">Words: <span className="font-semibold text-black">{doc.WordCount}</span></span>
+                            </div>
+                            <div className="flex items-center gap-1 text-gray-500">
+                              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 13.4V16.4C17 20.4 15.4 22 11.4 22H7.6C3.6 22 2 20.4 2 16.4V12.6C2 8.6 3.6 7 7.6 7H10.6" stroke="#A414D5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M17 13.4H13.8C11.4 13.4 10.6 12.6 10.6 10.2V7L17 13.4Z" stroke="#A414D5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M11.6 2H15.6" stroke="#A414D5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M7 5C7 3.34 8.34 2 10 2H12.62" stroke="#A414D5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M22 8V14.19C22 15.74 20.74 17 19.19 17" stroke="#A414D5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M22 8H19C16.75 8 16 7.25 16 5V2L22 8Z" stroke="#A414D5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                              <span className="text-sm text-[#6B7B93]">Pages: <span className="font-semibold text-black">{String(doc.Pages).padStart(2, "0")}</span></span>
+                            </div>
                           </div>
                         </div>
-                      </div>
                       </Link>
                     ))}
-                  </div>
+                    </div>
 
                   {/* Pagination */}
                   {totalPages > 1 && (
@@ -280,17 +296,17 @@ export default function Home() {
               )}
             </div>
             {/* Filters */}
-            <div className="w-full md:max-w-72 space-y-6 bg-white p-6 rounded-lg h-fit">
+            <div className="w-full md:w-72 md:min-w-72 space-y-6 bg-white p-6 rounded-[25px] h-fit">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Type of work</label>
                 <Select
                   defaultValue={filters.category || "all"}
                   onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full h-12 rounded-[12px]">
                     <SelectValue placeholder="All Project Types" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-[12px]">
                     <SelectItem value="all">All Project Types</SelectItem>
                     <SelectItem value="essay">Essay</SelectItem>
                     <SelectItem value="research">Research Paper</SelectItem>
@@ -304,10 +320,10 @@ export default function Home() {
                 <Select
                   onValueChange={(value) => setFilters(prev => ({ ...prev, subject: value }))}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full h-12 rounded-[12px]">
                     <SelectValue placeholder={searchParams.get("subject") ? searchParams.get("subject") : "Filter by subject"} defaultValue={searchParams.get("subject") || ""} />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-[12px]">
                     {Object.values(Subject).map((subject) => (
                         <SelectItem key={subject} value={subject}>
                             {subject}
@@ -320,10 +336,10 @@ export default function Home() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Type of work</label>
                 <Select defaultValue="any">
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full h-12 rounded-[12px]">
                     <SelectValue placeholder="Any Academic Level" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-[12px]">
                     <SelectItem value="any">Any Academic Level</SelectItem>
                     <SelectItem value="high-school">High School</SelectItem>
                     <SelectItem value="undergraduate">Undergraduate</SelectItem>
@@ -337,7 +353,7 @@ export default function Home() {
                 <div className="mt-4 px-2">
                   <Slider
                     defaultValue={[filters.minWords]}
-                    max={550000}
+                    max={filters.maxWords}
                     min={0}
                     step={1}
                     className="mb-6"
