@@ -109,10 +109,10 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
                             <span className={`font-medium text-black`}> {'AMA'}</span>
                         </p>
                         <p className="flex gap-2 text-[#6B7B93]">Uploaded By:
-                            <span className={`font-medium text-black`}> { document.author.username || 'N/A'}</span>
+                            <span className={`font-medium text-black`}> {document.author.username || 'N/A'}</span>
                         </p>
                         <p className="flex gap-2 text-[#6B7B93]">Date:
-                            <span className={`font-medium text-black`}> { document.createdAt ? new Date(document.createdAt).toLocaleDateString() : 'N/A'}</span>
+                            <span className={`font-medium text-black`}> {document.createdAt ? new Date(document.createdAt).toLocaleDateString() : 'N/A'}</span>
                         </p>
                     </div>
                 </div>

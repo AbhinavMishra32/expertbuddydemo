@@ -100,3 +100,11 @@ async function aiOnPdf(fileUrl: string, prompt: string) {
 }
 
 export default aiOnPdf;
+
+
+export async function cleanText(text: string | null | undefined): Promise<string> {
+    if (!text) return '';
+    return text
+        .replace(/\0/g, '')
+        .replace(/[\uFFFD\uFFFE\uFFFF]/g, '');
+}
