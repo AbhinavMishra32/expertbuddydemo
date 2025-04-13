@@ -148,7 +148,7 @@ export default function Home() {
                             <div className="xl:w-full w-[40%] h-full flex items-center px-6">
                                 <Image src="/logo.png" alt="Logo" width={135} height={60} />
                             </div>
-                            <div className="w-full flex md:justify-between justify-end items-center p-2">
+                            <div className="w-full flex gap-7 text-nowrap justify-end items-center p-2">
                                 <p className='md:inline hidden'>Find Tutor</p>
                                 <p className='md:inline hidden'>Become Tutor</p>
                                 <p className='md:inline hidden'>Sign In</p>
@@ -200,7 +200,7 @@ export default function Home() {
                             </div>
                         ) : (
                             <div className="relative w-fit mx-auto h-fit">
-                                <svg className="absolute -top-9 -left-10" width="60" height="73" viewBox="0 0 60 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg className="hidden md:block absolute -top-9 -left-10" width="60" height="73" viewBox="0 0 60 73" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20.7407 71C14.4618 59.7027 5.77095 47.3316 2.11109 34.5969C0.802087 30.0421 11.4709 38.1774 12.6037 38.9965C13.3478 39.5345 13.4157 39.8494 13.5316 38.2869C13.9471 32.6804 13.2265 26.9705 13.0676 21.3626C12.973 18.023 13.3112 17.1471 16.3153 19.4821C20.7802 22.9524 23.7013 27.7832 27.8785 31.4746C29.65 33.04 29.4793 23.0712 29.5559 22.3915C29.9719 18.7008 30.4908 13.0249 32.8036 9.83139C33.5215 8.84008 39.9673 22.4368 41.9757 20.4401C46.119 16.3209 49.9142 11.6819 53.075 6.78004C53.3143 6.4088 56.6438 -0.606002 56.6438 3.05458C56.6438 12.7352 56.7873 21.7588 58 31.4036" stroke="#A414D5" stroke-width="4" stroke-linecap="round" />
                                 </svg>
                                 <h2 className={`${DMSans.className} md:text-4xl sm:text-2xl text-xl flex justify-center w-full font-bold text-gray-800`}>

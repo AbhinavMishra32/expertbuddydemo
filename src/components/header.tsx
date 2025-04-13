@@ -4,6 +4,7 @@ import { DMSans, manrope } from '@/lib/fonts';
 import { Document } from '@prisma/client';
 import UserBar from './UserBar';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Header({ docProps, userId }: { docProps: Document, userId?: string }) {
 
@@ -23,9 +24,11 @@ export default function Header({ docProps, userId }: { docProps: Document, userI
 
         <div className={`${manrope.className} relative z-10 text-black flex justify-between sm:h-16 h-14 w-full bg-white rounded-full`}>
           <div className="xl:w-full w-[40%] h-full flex items-center px-6">
-            <Image src="/logo.png" alt="Logo" width={135} height={60} />
+            <Link href="/">
+              <Image src="/logo.png" alt="Logo" width={135} height={60} />
+            </Link>
           </div>
-          <div className="w-full flex md:justify-between justify-end items-center p-2">
+          <div className="w-full flex gap-7 text-nowrap justify-end items-center p-2">
             <p className='md:inline hidden'>Find Tutor</p>
             <p className='md:inline hidden'>Become Tutor</p>
             <p className='md:inline hidden'>Sign In</p>
