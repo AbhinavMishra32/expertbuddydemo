@@ -2,9 +2,11 @@
 
 import { prisma } from '@/lib/db';
 
+import { Subject } from '@prisma/client';
+
 type FilterParams = {
   searchQuery?: string;
-  subject?: string;
+  subject?: Subject;
   category?: string;
   minWords?: number;
   maxWords?: number;
@@ -23,29 +25,47 @@ export async function getFilteredDocuments(filters: FilterParams) {
     pageSize = 12,
   } = filters;
 
-  const where = {
-    AND: [
-      {
-        OR: [
-          { title: { contains: searchQuery, mode: 'insensitive' } },
-          { textContent: { contains: searchQuery, mode: 'insensitive' } },
-        ],
-      },
-      subject ? { subject } : {},
-      category ? { category } : {},
-      {
-        WordCount: {
-          gte: minWords,
-          lte: maxWords,
-        },
-      },
-    ],
-  };
 
-  const total = await prisma.document.count({ where });
+  const total = await prisma.document.count({
+    where: {
+      AND: [
+        {
+          OR: [
+            { title: { contains: searchQuery, mode: 'insensitive' } },
+            { textContent: { contains: searchQuery, mode: 'insensitive' } },
+          ],
+        },
+        subject ? { subject: { equals: subject } } : {},
+        category ? { category: { equals: category } } : {},
+        {
+          WordCount: {
+            gte: minWords,
+            lte: maxWords,
+          },
+        },
+      ],
+    }
+  });
 
   const docs = await prisma.document.findMany({
-    where,
+    where: {
+      AND: [
+        {
+          OR: [
+            { title: { contains: searchQuery, mode: 'insensitive' } },
+            { textContent: { contains: searchQuery, mode: 'insensitive' } },
+          ],
+        },
+        subject ? { subject: { equals: subject } } : {},
+        category ? { category: { equals: category } } : {},
+        {
+          WordCount: {
+            gte: minWords,
+            lte: maxWords,
+          },
+        },
+      ],
+    },
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: { createdAt: 'desc' },

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Slider } from "@/components/ui/slider"
@@ -19,7 +19,7 @@ import { Separator } from "@/components/ui/separator"
 import { useUser } from "@clerk/nextjs"
 import UserBar from "@/components/UserBar"
 
-export default function Home() {
+function HomePage() {
     const router = useRouter()
     const searchParams = useSearchParams()
 
@@ -28,7 +28,7 @@ export default function Home() {
     const [docs, setDocs] = useState<Document[]>([])
     const [filters, setFilters] = useState({
         searchQuery: searchParams.get("search") || "",
-        subject: searchParams.get("subject") || "",
+        subject: (searchParams.get("subject") as Subject) || undefined,
         category: searchParams.get("category") || "",
         minWords: searchParams.get("minWords") ? Number(searchParams.get("minWords")) : 0,
         maxWords: searchParams.get("maxWords") ? Number(searchParams.get("maxWords")) : 30000,
@@ -370,7 +370,7 @@ export default function Home() {
                             <div>
                                 <label className="block text-sm font-medium text-gray-800 mb-2">Subject</label>
                                 <Select
-                                    onValueChange={(value) => setFilters(prev => ({ ...prev, subject: value }))}
+                                    onValueChange={(value) => setFilters(prev => ({ ...prev, subject: value as Subject }))}
                                 >
                                     <SelectTrigger className="w-full h-12 rounded-[12px]">
                                         <SelectValue placeholder={searchParams.get("subject") ? searchParams.get("subject") : "Filter by subject"} defaultValue={searchParams.get("subject") || ""} />
@@ -446,4 +446,15 @@ export default function Home() {
             </main>
         </div>
     )
+}
+
+export default function Home() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto" />
+            <span className="sr-only">Loading...</span>
+        </div>}>
+            <HomePage />
+        </Suspense>
+    );
 }
