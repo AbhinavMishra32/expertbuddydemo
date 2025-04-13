@@ -129,7 +129,7 @@ function HomePage() {
                     </div>
                 </header>
             ) : (
-                <header className={`relative bg-[#A414D5] text-white pt-6 ${user ? "sm:h-[350px]" : "sm:h-[550px]"} h-fit lg:px-[140px] px-4 pb-10 overflow-hidden`}>
+                <header className={`relative bg-[#A414D5] text-white pt-6 ${user ? "sm:h-[350px]" : "sm:h-[430px]"} h-fit lg:px-[140px] px-4 pb-10 overflow-hidden`}>
                     <Image
                         src="/headerimg.png"
                         alt="Header background"
@@ -151,7 +151,9 @@ function HomePage() {
                             <div className="w-full flex gap-7 text-nowrap justify-end items-center p-2">
                                 <p className='md:inline hidden'>Find Tutor</p>
                                 <p className='md:inline hidden'>Become Tutor</p>
-                                <p className='md:inline hidden'>Sign In</p>
+                                <Link href="/signin">
+                                <p className='md:inline hidden hover:text-fuchsia-700'>Sign In</p>
+                                </Link>
                                 <button onClick={() => router.push('/signup')} className="rounded-full sm:text-base text-sm bg-black hover:bg-[#A414D5] text-white h-full px-8">
                                     Get Started For Free
                                 </button>
