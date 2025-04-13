@@ -1,9 +1,13 @@
+'use client';
 import Image from 'next/image';
 import { DMSans, manrope } from '@/lib/fonts';
 import { Document } from '@prisma/client';
 import UserBar from './UserBar';
+import { useRouter } from 'next/navigation';
 
-export default function Header({ docProps, userId }: { docProps: Document, userId: string }) {
+export default function Header({ docProps, userId }: { docProps: Document, userId?: string }) {
+
+  const router = useRouter()
   return (
     <header className="relative bg-[#A414D5] text-white pt-6 lg:px-[140px] px-4 pb-10 overflow-hidden">
       {userId && (
@@ -25,7 +29,7 @@ export default function Header({ docProps, userId }: { docProps: Document, userI
             <p className='md:inline hidden'>Find Tutor</p>
             <p className='md:inline hidden'>Become Tutor</p>
             <p className='md:inline hidden'>Sign In</p>
-            <button className="rounded-full sm:text-base text-sm bg-black hover:bg-[#A414D5] text-white h-full px-8">
+            <button onClick={() => router.push('/signup')} className="rounded-full sm:text-base text-sm bg-black hover:bg-[#A414D5] text-white h-full px-8">
               Get Started For Free
             </button>
           </div>

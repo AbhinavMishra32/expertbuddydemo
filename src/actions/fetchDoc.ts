@@ -2,13 +2,13 @@
 
 import { prisma } from "@/lib/db";
 
-export async function fetchDoc(docId: string, userId: string) {
+export async function fetchDoc(docId: string, userId?: string) {
     if (!docId) {
         throw new Error("Document ID is required");
     }
-    if (!userId) {
-        throw new Error("User ID is required");
-    }
+    // if (!userId) {
+    //     throw new Error("User ID is required");
+    // }
     try {
         const document = await prisma.document.findUnique({
             where: { id: docId },

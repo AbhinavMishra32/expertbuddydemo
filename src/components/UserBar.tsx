@@ -1,17 +1,22 @@
 import { DMSans, manrope } from '@/lib/fonts';
 import { UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
+import Link from 'next/link';
 export default function UserBar() {
     return (
         <div className={`${manrope.className} relative z-10 px-6 text-black flex justify-between sm:h-16 h-14 w-full bg-white rounded-full`}>
             <div className="w-fit h-full flex items-center">
-                <Image src="/logo.png" alt="Logo" width={135} height={60} />
+                <Link href='/'>
+                    <Image src="/logo.png" alt="Logo" width={135} height={60} />
+                </Link>
             </div>
             <div className={`${DMSans.className} w-full h-full flex gap-6 py-3 justify-end items-center`}>
                 <p className={`${manrope.className} text-gray-400`}>StudyBank</p>
                 <p className={`${manrope.className} text-gray-400`}>Find Tutor</p>
                 <p className={`${manrope.className} text-[#968191]`}>Homework</p>
-                <p className={`${manrope.className} hover:text-fuchsia-800 hover:cursor-pointer`}>Upload</p>
+                <Link href="/upload">
+                    <p className={`${manrope.className} hover:text-fuchsia-800 hover:cursor-pointer`}>Upload</p>
+                </Link>
                 <button className="flex gap-2 rounded-full bg-[#FCF4EA] hover:bg-[#ffe9d1] py-2 px-3">
                     <div><svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18.8281 9.57895V7.22102C18.8281 6.06259 17.9064 5.11591 16.7578 5.07458V3.62727C16.7578 2.87341 16.1445 2.26009 15.3906 2.26009H11.6266L11.1406 0.909033C11.0166 0.564501 10.7658 0.289189 10.4342 0.133837C10.1027 -0.0215533 9.73055 -0.0381159 9.38652 0.0871185L2.55625 2.5731C2.21258 2.69817 1.9384 2.9497 1.78418 3.28134C1.62996 3.61298 1.6143 3.98474 1.74012 4.32817L2.01453 5.0772C0.89207 5.14661 0 6.08138 0 7.22102V17.846C0 19.0307 0.963789 19.9945 2.14844 19.9945H16.6797C17.8643 19.9945 18.8281 19.0307 18.8281 17.846V15.41C19.4898 15.3149 20 14.7445 20 14.057V10.932C20 10.2444 19.4898 9.67403 18.8281 9.57895ZM18.8281 14.057C18.8281 14.1647 18.7405 14.2523 18.6328 14.2523H15.5078C14.5386 14.2523 13.75 13.4637 13.75 12.4945C13.75 11.5252 14.5386 10.7367 15.5078 10.7367H18.6328C18.7405 10.7367 18.8281 10.8243 18.8281 10.932V14.057ZM2.84047 3.92505C2.83158 3.90094 2.82756 3.87531 2.82864 3.84963C2.82972 3.82396 2.83588 3.79876 2.84676 3.77548C2.85755 3.75217 2.87286 3.73122 2.89179 3.71386C2.91073 3.69649 2.93291 3.68305 2.95707 3.67431L9.7873 1.18833C9.85363 1.16423 9.90953 1.18216 9.93699 1.19501C9.96445 1.20786 10.014 1.23935 10.0379 1.30575L10.3813 2.26013H10.1172C9.36332 2.26013 8.75 2.87345 8.75 3.62731V5.07263H3.2609L2.84047 3.92505ZM15.5859 3.62727V5.07259H9.92188V3.62727C9.92188 3.51958 10.0095 3.43196 10.1172 3.43196H15.3906C15.4983 3.43196 15.5859 3.51958 15.5859 3.62727ZM16.6797 18.8226H2.14844C1.60996 18.8226 1.17188 18.3845 1.17188 17.846V7.22102C1.17188 6.68255 1.60996 6.24446 2.14844 6.24446H16.6797C17.2182 6.24446 17.6562 6.68255 17.6562 7.22102V9.56478H15.5078C13.8924 9.56478 12.5781 10.879 12.5781 12.4945C12.5781 14.1099 13.8924 15.4242 15.5078 15.4242H17.6562V17.846C17.6562 18.3845 17.2182 18.8226 16.6797 18.8226Z" fill="#E38D2A" />

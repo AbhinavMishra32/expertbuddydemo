@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { analyzePdf } from "@/actions/analyzePdf";
 import UserBar from "@/components/UserBar";
 
-// Assuming UploadDropzone is imported from your library
 const UploadPage = () => {
   const { isLoaded, user } = useUser();
   const [uploading, setUploading] = useState(false);
