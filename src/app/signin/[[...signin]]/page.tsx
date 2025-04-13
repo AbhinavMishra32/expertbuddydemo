@@ -1,23 +1,18 @@
 "use client"
-
 import { SignIn } from "@clerk/nextjs"
-import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
-import { ArrowLeft, Sparkles, Stars } from "lucide-react"
+import Image from "next/image"
 import { useEffect, useState } from "react"
-import { hubotSans } from "@/lib/fonts"
 
-export default function SignInPage() {
-  const [mounted, setMounted] = useState(false)
-  const [hoverButton, setHoverButton] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
+export default function SignUpPage() {
 
   return (
-    <SignIn />
-  )
-}
+    <div className="w-screen h-screen flex items-center justify-center bg-[#F5F3EF]">
+      <div className="w-fit h-fit p-2 rounded-2xl bg-[#A414D5] flex flex-col gap-3 shadow-xl">
+        <div className="bg-[#F5F3EF] rounded-xl p-2">
+          <Image src="/logo.png" alt="Logo" width={135} height={60} />
+        </div>
+        <SignIn />
+      </div>
+    </div>
+  );
+};

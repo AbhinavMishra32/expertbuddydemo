@@ -26,11 +26,11 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${sen.variable} antialiased`}>
           <ThemeProvider>
-                <ThemeSelectorButton />
-                <UserProfileButton />
-                {children}
+            {/* <ThemeSelectorButton />
+                <UserProfileButton /> */}
+            {children}
           </ThemeProvider>
-          </body>
+        </body>
       </html>
     </ClerkProvider>
   );

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Sen } from "next/font/google";
 import "./globals.css";
 import React from "react";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -9,10 +8,9 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 
 export const metadata: Metadata = {
-    title: "Roadmap AI",
+    title: "",
     description: "Generate any roadmap you want",
 };
-
 
 export default async function RootLayout({
     children
@@ -30,16 +28,18 @@ export default async function RootLayout({
         >
             <html lang="en">
                 <body>
-                    <NextSSRPlugin
-                        /**
-                         * The `extractRouterConfig` will extract **only** the route configs
-                         * from the router to prevent additional information from being
-                         * leaked to the client. The data passed to the client is the same
-                         * as if you were to fetch `/api/uploadthing` directly.
-                         */
-                        routerConfig={extractRouterConfig(ourFileRouter)}
-                    />
-                    {children}
+                    <div>
+                        <NextSSRPlugin
+                            /**
+                             * The `extractRouterConfig` will extract **only** the route configs
+                             * from the router to prevent additional information from being
+                             * leaked to the client. The data passed to the client is the same
+                             * as if you were to fetch `/api/uploadthing` directly.
+                             */
+                            routerConfig={extractRouterConfig(ourFileRouter)}
+                        />
+                        {children}
+                    </div>
                 </body>
             </html>
         </ClerkProvider>
