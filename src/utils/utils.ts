@@ -29,43 +29,27 @@ export type AIResponse = {
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 async function aiOnPdf(fileUrl: string, prompt: string) {
-
     const schema = {
         "type": "object",
         "properties": {
-            "textContent": {
-                "type": "string"
-            },
+            "textContent": { "type": "string" },
             "tags": {
                 "type": "array",
-                "items": {
-                    "type": "string",
-                    "enum": Object.values(Tags)
-                }
+                "items": { "type": "string", "enum": Object.values(Tags) }
             },
-            "subject": {
-                "type": "string",
-                "enum": Object.values(Subject)
-            },
-            "category": {
-                "type": "string"
-            },
-            "language": {
-                "type": "string"
-            },
-            "description": {
-                "type": "string"
-            }
+            "subject": { "type": "string", "enum": Object.values(Subject) },
+            "category": { "type": "string" },
+            "language": { "type": "string" },
+            "description": { "type": "string" }
         }
     };
 
-    // file download as we have it in url
+    // Download the file as a buffer
     const response = await axios.get(fileUrl, { responseType: "arraybuffer" });
-    const filePath = path.join(process.cwd(), "temp.pdf");
-    await fs.writeFile(filePath, response.data);
 
+    // Upload the file using a Blob
     const uploaded = await ai.files.upload({
-        file: filePath,
+        file: new Blob([response.data], { type: "application/pdf" }),
         config: { mimeType: "application/pdf" },
     });
 

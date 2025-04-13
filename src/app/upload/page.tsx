@@ -84,9 +84,9 @@ const UploadPage = () => {
       return;
     }
     setSavingDocument(true);
-    if (manualPropSet) {
       const pdfAnalysis = await analyzePdf(fileUrl);
       const { wordCount, pageCount, text } = pdfAnalysis || { wordCount: 0, pageCount: 0 };
+    if (manualPropSet) {
       setPdfProperties({
         ...pdfProperties,
         textContent: await cleanText(text) || "",
@@ -114,8 +114,8 @@ const UploadPage = () => {
         fileUrl,
         title: pdfProperties.title || "Untitled Document",
         language: pdfProperties.language || "English",
-        pageCount: pdfProperties.pageCount || 0,
-        wordCount: pdfProperties.wordCount || 0,
+        pageCount: pageCount || 0,
+        wordCount: wordCount || 0,
       }
       const doc = await saveDoc(user.id, savingDoc);
     }
@@ -170,13 +170,9 @@ const UploadPage = () => {
 
       {/* Upload Section */}
       <div
-        className={`${DMSans.className} absolute w-3/4 h-fit max-w-4xl mx-auto -mt-4 bg-white rounded-[25px] shadow-lg overflow-hidden mb-8 sm:mx-auto top-[280px] left-1/2 transform -translate-x-1/2`}
+        className={`${DMSans.className} absolute sm:w-3/4 w-full h-fit max-w-4xl mx-auto sm:-mt-4 mt-10 bg-white rounded-[25px] shadow-lg overflow-hidden mb-8 sm:mx-auto top-[280px] left-1/2 transform -translate-x-1/2`}
         style={{ transformOrigin: "top center" }}
       >
-        <div className="absolute -top-20 left-0 max-w-4xl mx-auto px-4">
-          <h1 className={`${DMSans.className} text-5xl font-bold text-white mb-2`}>Upload Document</h1>
-          <p className={`${DMSans.className} text-white font-light text-lg`}>Share your study materials with our community</p>
-        </div>
         {/* Progress Indicator */}
         <div className={`${DMSans.className} bg-[#F5F3EF] px-6 py-4 border-b`}>
           <div className="flex items-center justify-between max-w-md mx-auto">
@@ -515,7 +511,7 @@ const UploadPage = () => {
             <div className="flex justify-center mt-6">
               <button
                 className="bg-[#A414D5] text-white px-8 py-3 rounded-full font-medium hover:bg-purple-700 transition-colors shadow-sm flex items-center justify-center"
-                onClick={() => router.push('/home')}
+                onClick={() => router.push('/')}
               >
                 Go to Dashboard
               </button>
