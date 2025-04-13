@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { Upload, AlertCircle, Check, FileText, Loader } from "lucide-react";
-import { DMSans } from "@/lib/fonts";
+import { DMSans, manrope } from "@/lib/fonts";
 import Image from "next/image";
 import { UploadDropzone } from "@/utils/uploadthings";
 import { Subject, Tags } from "@prisma/client";
@@ -10,6 +10,7 @@ import { saveDoc } from "@/actions/saveDoc";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { analyzePdf } from "@/actions/analyzePdf";
+import UserBar from "@/components/UserBar";
 
 // Assuming UploadDropzone is imported from your library
 const UploadPage = () => {
@@ -25,6 +26,9 @@ const UploadPage = () => {
 
   const router = useRouter();
 
+  if (!user && isLoaded) {
+    router.push("/signin");
+  }
   const [pdfProperties, setPdfProperties] = useState({
     textContent: "",
     subject: "",
@@ -134,45 +138,48 @@ const UploadPage = () => {
   const tagOptions = Object.values(Tags);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header Section */}
-      <header className="relative bg-[#A414D5] text-white sm:h-[150px] h-[90px] overflow-hidden">
+    <div className="min-h-screen bg-[#F5F3EF]">
+      {user && (
+        <UserBar />
+      )}
+      <header className="relative bg-[#A414D5] text-white pt-6 h-[350px] lg:px-[140px] px-4 pb-10 overflow-hidden">
         <Image
-          src="/api/placeholder/1920/300"
+          src="/headerimg.png"
           alt="Header background"
           fill
           className="object-cover mix-blend-multiply pointer-events-none opacity-90 z-0"
         />
-        <div className="max-w-7xl mx-auto flex items-center justify-between h-full px-4 lg:px-[140px] relative z-10">
-          <div className="flex items-center">
-            <div className="bg-white p-2 rounded-full">
-              <svg className="w-8 h-8 text-purple-600" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 16v-2h2v2h-2zm2.07-7.75l-.9.92c-.5.51-.86.97-1.04 1.69-.08.32-.13.68-.13 1.14h-2v-.5c0-.46.08-.9.22-1.31.2-.58.53-1.1.95-1.52l1.24-1.26c.46-.44.68-1.1.55-1.8-.13-.72-.69-1.33-1.39-1.53-1.11-.31-2.14.32-2.47 1.27-.12.35-.43.58-.79.58-.5 0-.89-.46-.78-.96.44-2.05 2.49-3.35 4.58-2.85 1.45.34 2.59 1.6 2.77 3.08.19 1.5-.35 2.8-1.57 3.76z" />
-              </svg>
-            </div>
-            <span className="text-white text-2xl font-bold ml-2">BUDDY</span>
+        {/* <div className={`${manrope.className} relative z-10 text-black flex justify-between sm:h-16 h-14 w-full bg-white rounded-full`}>
+          <div className="xl:w-full w-[40%] h-full flex items-center px-6">
+            <Image className="object-cover mix-blend-multiply pointer-events-none opacity-90 z-0" src="/logo.png" alt="Logo" width={135} height={60} />
           </div>
-          <div className="hidden sm:flex items-center space-x-4">
-            <a href="#" className="text-white hover:text-gray-200">Find Tutor</a>
-            <a href="#" className="text-white hover:text-gray-200">Become Tutor</a>
-            <a href="#" className="text-white hover:text-gray-200">Sign In</a>
-            <a href="#" className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-900 transition-colors">Get Started For Free</a>
+          <div className="w-full flex md:justify-between justify-end items-center p-2">
+            <p className='md:inline hidden'>Find Tutor</p>
+            <p className='md:inline hidden'>Become Tutor</p>
+            <p className='md:inline hidden'>Sign In</p>
+            <button className="rounded-full sm:text-base text-sm bg-black hover:bg-[#A414D5] text-white h-full px-8">
+              Get Started For Free
+            </button>
           </div>
+        </div> */}
+
+        <div className="max-w-4xl mt-14 mx-auto px-4">
+          <h1 className={`${DMSans.className} text-5xl font-bold text-white mb-2`}>Upload Document</h1>
+          <p className={`${DMSans.className} text-white font-light text-lg`}>Share your study materials with our community</p>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="bg-[#A414D5] pt-8 pb-16">
-        <div className="max-w-4xl mx-auto px-4">
-          <h1 className={`${DMSans.className} text-4xl font-bold text-white mb-2`}>Upload Document</h1>
-          <p className="text-white text-lg">Share your study materials with our community</p>
-        </div>
-      </div>
-
       {/* Upload Section */}
-      <div className="max-w-4xl mx-auto -mt-8 bg-white rounded-lg shadow-lg overflow-hidden mb-8 sm:mx-auto">
+      <div
+        className={`${DMSans.className} absolute w-3/4 h-fit max-w-4xl mx-auto -mt-4 bg-white rounded-[25px] shadow-lg overflow-hidden mb-8 sm:mx-auto top-[280px] left-1/2 transform -translate-x-1/2`}
+        style={{ transformOrigin: "top center" }}
+      >
+        <div className="absolute -top-20 left-0 max-w-4xl mx-auto px-4">
+          <h1 className={`${DMSans.className} text-5xl font-bold text-white mb-2`}>Upload Document</h1>
+          <p className={`${DMSans.className} text-white font-light text-lg`}>Share your study materials with our community</p>
+        </div>
         {/* Progress Indicator */}
-        <div className="bg-gray-50 px-6 py-4 border-b">
+        <div className={`${DMSans.className} bg-[#F5F3EF] px-6 py-4 border-b`}>
           <div className="flex items-center justify-between max-w-md mx-auto">
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${uploadDone ? 'bg-green-500' : 'bg-[#A414D5]'} text-white`}>
@@ -200,7 +207,7 @@ const UploadPage = () => {
         {/* Upload Dropzone */}
         {!uploadDone && (
           <div className="p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Upload Your Document</h2>
+            <h2 className={"text-xl font-semibold text-gray-800 mb-4" + DMSans.className}>Upload Your Document</h2>
 
             <div className="border-2 border-dashed rounded-lg">
               <UploadDropzone
@@ -219,7 +226,7 @@ const UploadPage = () => {
             </div>
 
             {uploading && (
-              <div className="flex items-center justify-center mt-4 text-[#A414D5]">
+              <div className={"flex items-center justify-center mt-4 text-[#A414D5]" + DMSans.className}>
                 <Loader className="animate-spin mr-2" size={20} />
                 <span>Uploading your document...</span>
               </div>
@@ -501,14 +508,14 @@ const UploadPage = () => {
           <div className="p-6 text-center">
             <div className="bg-green-50 border border-green-200 p-4 rounded-lg mb-6 flex items-start">
               <Check className="text-green-500 mr-2 mt-1 flex-shrink-0" />
-              <div>
+              <div className="flex flex-col items-start">
                 <p className="text-green-700 font-medium">Document saved successfully!</p>
                 <p className="text-green-600 text-sm">Thank you for sharing your document with us.</p>
               </div>
             </div>
             <div className="flex justify-center mt-6">
               <button
-                className="bg-[#A414D5] text-white px-8 py-3 rounded-md font-medium hover:bg-purple-700 transition-colors shadow-sm flex items-center justify-center"
+                className="bg-[#A414D5] text-white px-8 py-3 rounded-full font-medium hover:bg-purple-700 transition-colors shadow-sm flex items-center justify-center"
                 onClick={() => router.push('/home')}
               >
                 Go to Dashboard

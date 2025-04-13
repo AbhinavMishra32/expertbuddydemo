@@ -9,14 +9,14 @@ const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
 export const ourFileRouter = {
     // Define as many FileRoutes as you like, each with a unique routeSlug
     imageUploader: f({
-        image: {
-            /**
-             * For full list of options and defaults, see the File Route API reference
-             * @see https://docs.uploadthing.com/file-routes#route-config
-             */
-            maxFileSize: "4MB",
-            maxFileCount: 1,
-        },
+        // image: {
+        //     /**
+        //      * For full list of options and defaults, see the File Route API reference
+        //      * @see https://docs.uploadthing.com/file-routes#route-config
+        //      */
+        //     maxFileSize: "4MB",
+        //     maxFileCount: 1,
+        // },
         pdf: {
             maxFileSize: "8MB",
             maxFileCount: 1,

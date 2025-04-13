@@ -13,6 +13,7 @@ type Author = {
     username: string;
 }
 
+
 type UnlockedBy = Author;
 
 type DocumentWithAuthorUnlockedBy = Document & {
@@ -34,7 +35,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 
     return (
         <>
-            <Header docProps={document} />
+            <Header docProps={document} userId={userId} />
             <div className="h-full flex flex-col md:flex-row gap-6 px-2 lg:px-20 py-10 bg-[#F5F3EF]">
                 <div className="bg-white sm:px-8 px-2 pt-8 pb-8 sm:rounded-[40px] rounded-2xl md:w-3/4 w-full h-full space-y-6">
                     <div className="flex justify-center items-center h-10">
