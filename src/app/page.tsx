@@ -98,7 +98,7 @@ function HomePage() {
         <div className="min-h-screen flex flex-col">
             {user && isLoaded && (<UserBar />)}
             {searchParams.get("search") ? (
-                <header className="relative bg-[#A414D5] text-white sm:h-[150px] h-[90px] lg:px-[140px] px-4 overflow-hidden">
+                <header className={`relative bg-[#A414D5] text-white sm:h-[150px] h-[90px] lg:px-[140px] px-4 overflow-hidden`}>
                     <Image
                         src="/headerimg.png"
                         alt="Header background"
@@ -129,7 +129,7 @@ function HomePage() {
                     </div>
                 </header>
             ) : (
-                <header className="relative bg-[#A414D5] text-white pt-6 sm:h-[450px] h-fit lg:px-[140px] px-4 pb-10 overflow-hidden">
+                <header className={`relative bg-[#A414D5] text-white pt-6 ${user ? "sm:h-[350px]" : "sm:h-[550px]"} h-fit lg:px-[140px] px-4 pb-10 overflow-hidden`}>
                     <Image
                         src="/headerimg.png"
                         alt="Header background"
